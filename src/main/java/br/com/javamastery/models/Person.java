@@ -1,5 +1,7 @@
 package br.com.javamastery.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -14,6 +16,7 @@ public class Person {
     @Column(name = "birth_date")
     private LocalDate birthDate;
     private String cpf;
+    @Formula("extract(year from age(current_date, birth_date))")
     private int age;
 
     public String getName() {

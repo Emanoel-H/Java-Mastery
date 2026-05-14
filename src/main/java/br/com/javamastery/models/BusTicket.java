@@ -75,6 +75,10 @@ public class BusTicket {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @PrePersist
     public void prePersistOperations(){
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
