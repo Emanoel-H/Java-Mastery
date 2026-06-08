@@ -1,24 +1,28 @@
 package br.com.javamastery.models;
 
-import br.com.javamastery.dao.AddressDAO;
-import br.com.javamastery.util.JPAUtils;
 import br.com.javamastery.util.ValidationUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "bus_ticket")
+@Getter
+@Setter
 public class BusTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "traveler_id")
-    private Person traveler;
-    @Column(name = "price")
+    private Traveler traveler;
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal ticketPrice;
     @Column(name = "origin_city")
     private String originCity;
@@ -30,54 +34,10 @@ public class BusTicket {
     private LocalDate saleDate;
     @Enumerated(EnumType.STRING)
     private Category category;
-
-    public BusTicket() {
-        this.traveler = new Person();
-    }
-
-    public Person getTraveler() {
-        return traveler;
-    }
-
-    public void setTraveler(Person traveler) {
-        this.traveler = traveler;
-    }
-
-    public BigDecimal getTicketPrice() {
-        return ticketPrice;
-    }
-
-    public void setTicketPrice(BigDecimal ticketPrice) {
-        this.ticketPrice = ticketPrice;
-    }
-
-    public String getOriginCity() {
-        return originCity;
-    }
-
-    public void setOriginCity(String originCity) {
-        this.originCity = originCity;
-    }
-
-    public String getDestinationCity() {
-        return destinationCity;
-    }
-
-    public void setDestinationCity(String destinationCity) {
-        this.destinationCity = destinationCity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
+    private boolean isCancelable;
+    private LocalDateTime cancelDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime editedAt;
 
     @PrePersist
     public void prePersistOperations(){
@@ -93,6 +53,14 @@ public class BusTicket {
         if (this.category == null){
             this.category = Category.INTERCITY;
         }
+
+        this.createdAt = LocalDateTime.now();
+        this.editedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdateOperations(){
+        this.editedAt = LocalDateTime.now();
     }
 
     @Override

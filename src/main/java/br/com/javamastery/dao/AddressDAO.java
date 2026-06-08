@@ -5,7 +5,9 @@ import br.com.javamastery.models.State;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddressDAO {
     private EntityManager em;
@@ -54,30 +56,34 @@ public class AddressDAO {
     }
 
     public City searchCity(City cityA){
-        String jpql = "SELECT c.IBGE_code FROM City c WHERE 1=1 ";
+        StringBuilder jpql = new StringBuilder("SELECT c FROM City c WHERE 1=1 ");
 
-        if (cityA.getCity() != null)
-            jpql += "AND c.city LIKE :city ";
+        Map<String, Object> params = new HashMap<>();
 
-        if (cityA.getState().getUf() != null)
-            jpql += "AND c.state.uf LIKE :uf ";
+        if (cityA.getCity() != null && !cityA.getCity().isBlank()) {
+            jpql.append("AND c.city LIKE :city ");
+            params.put("city", cityA.getCity() + "%");
+        }
 
-        if (cityA.getState().getName() != null)
-            jpql += "AND c.state.name LIKE :state ";
+        if (cityA.getState().getUf() != null && !cityA.getState().getUf().isBlank()) {
+            jpql.append("AND c.state.uf LIKE :uf ");
+            params.put("uf", cityA.getState().getUf());
+        }
 
-        TypedQuery<Long> query = this.em.createQuery(jpql, Long.class);
+        if (cityA.getState().getName() != null && !cityA.getState().getName().isBlank()) {
+            jpql.append("AND c.state.name LIKE :state ");
+            params.put("state", cityA.getState().getName());
+        }
 
-        if (cityA.getCity() != null)
-            query.setParameter("city", cityA.getCity() + "%");
+        TypedQuery<City> query = this.em.createQuery(jpql.toString(), City.class);
 
-        if (cityA.getState().getUf() != null)
-            query.setParameter("uf", cityA.getState().getUf());
+        params.forEach(query::setParameter);
 
-        if (cityA.getState().getName() != null)
-            query.setParameter("state", cityA.getState().getName());
+        if (params.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be informed.");
 
-        Long cityId = query.setFirstResult(0).setMaxResults(1).getSingleResult();
+        List<City> result = query.getResultList();
 
-        return this.em.find(City.class, cityId);
+        return result.isEmpty() ? null : result.getFirst();
     }
 }

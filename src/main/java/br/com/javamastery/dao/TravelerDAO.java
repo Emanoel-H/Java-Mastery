@@ -1,33 +1,56 @@
 package br.com.javamastery.dao;
 
-import br.com.javamastery.models.Person;
+import br.com.javamastery.models.Traveler;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TravelerDAO {
     private EntityManager em;
-
-
 
     public TravelerDAO(EntityManager em) {
         this.em = em;
     }
 
-//    public List<Person> searchTraveler(){
-//
-//    }
+    public void save(Traveler traveler){
+        this.em.persist(traveler);
+    }
 
-    public Person searchTraveler(Person travelerA){
-        String jpql = "SELECT t FROM Person t WHERE 1=1";
+    public void update(Traveler traveler){
+        this.em.merge(traveler);
+    }
 
-        if (travelerA.getCpf() != null)
-            jpql = jpql + "AND t.cpf LIKE :cpf ";
+    public void delete(Traveler traveler){
+        traveler = this.em.merge(traveler);
+        this.em.remove(traveler);
+    }
 
-        TypedQuery<Long> query = this.em.createQuery(jpql, Long.class);
+    public Traveler searchPerson(Traveler traveler){
+        StringBuilder jpql = new StringBuilder("SELECT p FROM Person p WHERE 1=1 ");
+        Map<String, Object> params = new HashMap<>();
 
+        if (traveler.getEmail() != null && traveler.getEmail().getEmail() != null && !traveler.getEmail().getEmail().isBlank()) {
+            jpql.append("AND p.email.email = :email ");
+            params.put("email", traveler.getEmail().getEmail());
+        }
 
-        return em.find(Person.class, 1L);
+        if (traveler.getCpf() != null && !traveler.getCpf().isBlank()) {
+            jpql.append("AND p.cpf = :cpf ");
+            params.put("cpf", traveler.getCpf());
+        }
+
+        TypedQuery<Traveler> query = em.createQuery(jpql.toString(), Traveler.class);
+
+        params.forEach(query::setParameter);
+
+        if (params.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be informed.");
+
+        List<Traveler> results = query.getResultList();
+
+        return results.isEmpty() ? null : results.getFirst();
     }
 }

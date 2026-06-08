@@ -1,9 +1,14 @@
 package br.com.javamastery.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cities")
+@Getter
+@Setter
 public class City {
     @Id
     private Long IBGE_code;
@@ -17,54 +22,6 @@ public class City {
 
     public City() {
         this.state = new State();
-    }
-
-    public Long getIBGE_code() {
-        return IBGE_code;
-    }
-
-    public void setIBGE_code(Long IBGE_code) {
-        this.IBGE_code = IBGE_code;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public int getDdd() {
-        return ddd;
-    }
-
-    public void setDdd(int ddd) {
-        this.ddd = ddd;
     }
 
     @Override
