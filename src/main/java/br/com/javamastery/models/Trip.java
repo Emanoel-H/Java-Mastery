@@ -85,12 +85,14 @@ public class Trip {
     @Override
     public String toString() {
         return """
+                Trip Code: %s
                 Origin City: %s
                 Destination City: %s
                 Distance: %.2f
                 Travel time: %s
                 Price: %.2f
-                """.formatted(this.originCity.getCity(),
+                """.formatted(this.code,
+                this.originCity.getCity(),
                 this.originCity.getCity(),
                 this.distanceKM,
                 distanceToHours(),
