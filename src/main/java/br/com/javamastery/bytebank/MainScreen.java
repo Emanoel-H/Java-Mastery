@@ -13,6 +13,7 @@ import br.com.javamastery.util.JPAUtils;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -152,7 +153,6 @@ public class MainScreen {
                 System.out.println("Type in your CPF: ");
                 String cpf = sc.nextLine();
                 travelerDB.setCpf(cpf);
-                travelerDB.setEditedAt(LocalDate.now());
                 travelerDAO.update(travelerDB);
                 break;
             case 3:
@@ -160,14 +160,12 @@ public class MainScreen {
                 String dateFormatted = sc.nextLine();
                 LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
                 travelerDB.setBirthDate(birthDate);
-                travelerDB.setEditedAt(LocalDate.now());
                 travelerDAO.update(travelerDB);
                 break;
             case 4:
                 System.out.println("Type in your new password: ");
                 password = sc.nextLine();
                 travelerDB.getEmail().setPassword(password);
-                travelerDB.setEditedAt(LocalDate.now());
                 travelerDAO.update(travelerDB);
                 break;
             case 5:
@@ -206,8 +204,6 @@ public class MainScreen {
         travelerA.setCpf(cpf);
         travelerA.getEmail().setEmail(emailAddress);
         travelerA.getEmail().setPassword(password);
-        travelerA.setCreatedAt(LocalDate.now());
-        travelerA.setEditedAt(LocalDate.now());
         travelerA.setTelephone(telephone);
 
         travelerDAO.save(travelerA);
@@ -237,18 +233,6 @@ public class MainScreen {
         sc.nextLine();
 
         if (choice == 1) {
-//            System.out.println("Type in your CPF");
-//            String cpf = sc.nextLine();
-//            busTicketA.getTraveler().setCpf(cpf);
-//            List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
-//            String messageToDisplay = "Here is your ticket: ";
-//
-//            if (allTickets.size() > 1)
-//                messageToDisplay = "Here are your tickets: ";
-//
-//            System.out.println(messageToDisplay);
-//            allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
-
             System.out.println("Type in the code of the ticket you want to alter: ");
             String ticketCode = sc.nextLine();
             busTicketA.setCode(ticketCode);
