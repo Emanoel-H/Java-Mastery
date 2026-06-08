@@ -36,7 +36,6 @@ public class BusTicket {
     private Category category;
     private boolean isCancelable;
     private LocalDateTime cancelDate;
-    private LocalDateTime createdAt;
     private LocalDateTime editedAt;
 
     @PrePersist
@@ -54,7 +53,6 @@ public class BusTicket {
             this.category = Category.INTERCITY;
         }
 
-        this.createdAt = LocalDateTime.now();
         this.editedAt = LocalDateTime.now();
     }
 
