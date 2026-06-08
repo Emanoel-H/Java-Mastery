@@ -29,6 +29,16 @@ public class TripDAO {
             params.put("companyEmail", tripA.getBusCompany().getEmail().getEmail());
         }
 
+        if (tripA.getOriginCity() != null && tripA.getOriginCity().getIBGE_code() != null) {
+            jpql.append("AND t.originCity.IBGE_code = :IBGECode ");
+            params.put("IBGECode", tripA.getOriginCity().getIBGE_code());
+        }
+
+        if (tripA.getDestinationCity() != null && tripA.getDestinationCity().getIBGE_code() != null) {
+            jpql.append("AND t.destinationCity.IBGE_code = :IBGECodeDestination ");
+            params.put("IBGECodeDestination", tripA.getDestinationCity().getIBGE_code());
+        }
+
         TypedQuery<Trip> query = this.em.createQuery(jpql.toString(), Trip.class);
 
         params.forEach(query::setParameter);
