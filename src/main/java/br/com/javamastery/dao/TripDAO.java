@@ -66,6 +66,11 @@ public class TripDAO {
             params.put("IBGECodeDestination", tripA.getDestinationCity().getIBGE_code());
         }
 
+        if (tripA.getCode() != null && !tripA.getCode().isBlank()) {
+            jpql.append("AND t.code = :code ");
+            params.put("code", tripA.getCode());
+        }
+        
         TypedQuery<Trip> query = this.em.createQuery(jpql.toString(), Trip.class);
 
         params.forEach(query::setParameter);
