@@ -1,13 +1,7 @@
 package br.com.javamastery.bytebank;
 
-import br.com.javamastery.dao.AddressDAO;
-import br.com.javamastery.dao.BusTicketDAO;
-import br.com.javamastery.dao.EmailDAO;
-import br.com.javamastery.dao.TravelerDAO;
-import br.com.javamastery.models.BusTicket;
-import br.com.javamastery.models.City;
-import br.com.javamastery.models.Email;
-import br.com.javamastery.models.Traveler;
+import br.com.javamastery.dao.*;
+import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
 import javax.persistence.EntityManager;
@@ -15,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class MainScreen {
@@ -243,8 +238,6 @@ public class MainScreen {
                     1- Traveler's name
                     2- Traveler's CPF
                     3- Traveler's birth date
-                    4- Origin City
-                    5- Destination City
                     """);
             choice = sc.nextInt();
             sc.nextLine();
@@ -268,24 +261,6 @@ public class MainScreen {
                     String dateFormatted = sc.nextLine();
                     LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
                     busTicketSought.getTraveler().setBirthDate(birthDate);
-                    busTicketDao.update(busTicketSought);
-                    break;
-                case 4:
-                    allCities.forEach(c2 -> System.out.println(c2.getCity()));
-                    System.out.println("Type in your Origin City: ");
-                    String originCity = sc.nextLine();
-                    cityA.setCity(originCity);
-                    cityDB = addressDAO.searchCity(cityA);
-                    busTicketSought.setOriginCity(cityDB.getCity());
-                    busTicketDao.update(busTicketSought);
-                    break;
-                case 5:
-                    allCities.forEach(c2 -> System.out.println(c2.getCity()));
-                    System.out.println("Type in your Destination City: ");
-                    String destinationCity = sc.nextLine();
-                    cityA.setCity(destinationCity);
-                    cityDB = addressDAO.searchCity(cityA);
-                    busTicketSought.setOriginCity(cityDB.getCity());
                     busTicketDao.update(busTicketSought);
                     break;
                 default:
@@ -335,7 +310,7 @@ public class MainScreen {
         Scanner sc = new Scanner(System.in);
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("ddMMyyyy");
         boolean bTraveller = false;
         String name, cpf;
         LocalDate birthDate;
@@ -344,13 +319,74 @@ public class MainScreen {
         EntityManager em = jpaUtils.getEntityManager();
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         AddressDAO addressDAO = new AddressDAO(em);
+        TripDAO tripDAO = new TripDAO(em);
+        Trip tripA = new Trip();
         City cityA = new City();
 
         System.out.println("---------------------------");
         System.out.println("      Bus Tickets App      ");
 
         em.getTransaction().begin();
+
         while (endTickets != 1){
+            boolean getBackCities = true;
+            BusTicket busTicket = new BusTicket();
+
+            while (getBackCities) {
+                System.out.println("Where is your origin?");
+                List<City> allCities = addressDAO.searchCitiesByState("RJ");
+                allCities.forEach(c2 -> System.out.println(c2.getCity()));
+                String originCity = sc.nextLine();
+                cityA.setCity(originCity);
+                cityA.getState().setUf("RJ");
+                City cityDB = addressDAO.searchCity(cityA);
+                tripA.setOriginCity(cityDB);
+
+                System.out.println("Where is your destination?");
+                allCities.forEach(c2 -> System.out.println(c2.toString()));
+                String destinationCity = sc.nextLine();
+                cityA.setCity(destinationCity);
+                cityDB = addressDAO.searchCity(cityA);
+                tripA.setDestinationCity(cityDB);
+
+                List<Trip> availableTrips = tripDAO.searchTrips(tripA);
+
+                if (!availableTrips.isEmpty()) {
+                    boolean getBackTrips = true;
+                    while (getBackTrips) {
+                        availableTrips.forEach(trip -> System.out.println(trip.toString()));
+
+                        System.out.println("Type in the code of the trip you selected: ");
+                        String tripCode = sc.nextLine().trim();
+                        tripA.setCode(tripCode);
+                        Trip tripDB = tripDAO.searchSingleTrip(tripA);
+                        if (tripDB != null) {
+                            busTicket.setTrip(tripDB);
+                            getBackTrips = false;
+                        }else
+                            System.out.println("There is no trip with that code. Try again!");
+                    }
+                    getBackCities = false;
+                } else
+                    throw new RuntimeException("There are no trips matching these cities you selected! Try again!");
+            }
+            boolean getBackDeparture = true;
+            while (getBackDeparture) {
+                try {
+                    System.out.println("Type in the date of when you are willing to travel: (pattern: dd/MM/yyyy)");
+                    String departureDay = sc.nextLine();
+                    LocalDate departureDate = LocalDate.parse(departureDay, parser);
+
+                    if (!departureDate.isBefore(LocalDate.now())) {
+                        getBackDeparture = false;
+                        busTicket.setDepartureDate(departureDate);
+                    } else
+                        System.out.println("Invalid departure date! You can't travel to past! Try again!");
+                }catch (DateTimeParseException e) {
+                    System.out.println("Invalid departure date! Try again!");
+                }
+            }
+
             System.out.println("""
                     Are you the one who is travelling?
                     1 - Yes
@@ -358,44 +394,25 @@ public class MainScreen {
                     """);
             String answerTraveller = sc.nextLine();
 
-            if (answerTraveller == "1")
+            if (answerTraveller.equals("1") || answerTraveller.equalsIgnoreCase("Yes"))
                 bTraveller = true;
-
-            BusTicket busTicket = new BusTicket();
 
             if (!bTraveller) {
                 System.out.println("Type ur name:");
-                name = sc.nextLine();
+                name = sc.nextLine().replaceAll("\\d", "");
 
                 System.out.println("Type ur birth date:");
                 String dateFormatted = sc.nextLine();
                 birthDate = LocalDate.parse(dateFormatted, parser);
 
                 System.out.println("Type ur CPF:");
-                cpf = sc.nextLine();
+                cpf = sc.nextLine().replaceAll("\\D", "");
             } else {
                 name = traveler.getName();
                 birthDate = traveler.getBirthDate();
                 cpf = traveler.getCpf();
             }
 
-            System.out.println("Where is your origin?");
-            List<City> allCities = addressDAO.searchCitiesByState("RJ");
-            allCities.forEach(c2 -> System.out.println(c2.getCity()));
-            String originCity = sc.nextLine();
-            cityA.setCity(originCity);
-            cityA.getState().setUf("RJ");
-            City cityDB = addressDAO.searchCity(cityA);
-            busTicket.setOriginCity(cityDB.getCity());
-
-            System.out.println("Where is your destination?");
-            allCities.forEach(c2 -> System.out.println(c2.toString()));
-            String destinationCity = sc.nextLine();
-            cityA.setCity(destinationCity);
-            cityDB = addressDAO.searchCity(cityA);
-            busTicket.setDestinationCity(cityDB.getCity());
-
-            busTicket.setTicketPrice(new BigDecimal("49.90"));
             busTicket.getTraveler().setName(name);
             busTicket.getTraveler().setCpf(cpf);
             busTicket.getTraveler().setBirthDate(birthDate);
@@ -403,17 +420,14 @@ public class MainScreen {
             busTicketList.add(busTicket);
 
             busTicketDao.save(busTicket);
+            em.getTransaction().commit();
 
-            System.out.println("You want to add another traveler to this buying?");
+            System.out.println("Do you want to buy another ticket?");
             endTickets = sc.nextInt();
             sc.nextLine();
         }
 
-        em.getTransaction().commit();
         em.close();
-
-        for (BusTicket busTicket : busTicketList) {
-            System.out.println(busTicket.toString());
-        }
+        busTicketList.forEach(System.out::println);
     }
 }
