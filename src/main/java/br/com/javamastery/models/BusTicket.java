@@ -35,10 +35,10 @@ public class BusTicket {
     private boolean isCancelable;
     private LocalDateTime cancelDate;
     private LocalDateTime editedAt;
+    private LocalDate departureDate;
 
     @PrePersist
     public void prePersistOperations(){
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         if (this.code == null){
             this.code = ValidationUtils.generateRamdomCode(10);
         }
