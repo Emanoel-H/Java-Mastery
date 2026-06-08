@@ -51,6 +51,10 @@ public class BusTicket {
             this.category = Category.INTERCITY;
         }
 
+        if (this.trip != null){
+            this.ticketPrice = this.trip.getPrice();
+        }
+
         this.editedAt = LocalDateTime.now();
     }
 
