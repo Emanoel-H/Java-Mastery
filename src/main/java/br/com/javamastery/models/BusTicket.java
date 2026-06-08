@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,10 +23,9 @@ public class BusTicket {
     private Traveler traveler;
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal ticketPrice;
-    @Column(name = "origin_city")
-    private String originCity;
-    @Column(name = "destination_city")
-    private String destinationCity;
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "trip_id")
+    private Trip trip;
     @Column(name = "code", length = 10, unique = true)
     private String code;
     @Column(name = "sale_date")
@@ -71,8 +69,8 @@ public class BusTicket {
                 this.traveler.getAge(),
                 this.traveler.getCpf(),
                 parser.format(this.traveler.getBirthDate()),
-                this.originCity,
-                this.destinationCity,
+                this.trip.getOriginCity().getCity(),
+                this.trip.getDestinationCity().getCity(),
                 this.ticketPrice.doubleValue(),
                 this.code);
     }
