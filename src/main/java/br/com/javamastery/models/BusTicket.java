@@ -47,8 +47,12 @@ public class BusTicket {
             this.saleDate = LocalDate.now();
         }
 
-        if (this.category == null){
-            this.category = Category.INTERCITY;
+        if (this.category == null && this.trip != null
+                && this.trip.getOriginCity() != null && this.trip.getDestinationCity() != null){
+            if (this.trip.getOriginCity().getState().getUf().equals(this.trip.getDestinationCity().getState().getUf()))
+                this.category = Category.INTERCITY;
+            else
+                this.category = Category.INTERSTATE;
         }
 
         if (this.trip != null){
