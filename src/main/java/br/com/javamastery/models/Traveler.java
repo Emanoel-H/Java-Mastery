@@ -67,6 +67,10 @@ public class Traveler {
             throw new IllegalArgumentException("Telephone cannot be null or empty");
     }
 
+    public void setCreditsBalance(BigDecimal creditsBalance) {
+        this.creditsBalance = this.creditsBalance.add(creditsBalance);
+    }
+
     @PrePersist
     public void prePersistOperations(){
         this.createdAt = LocalDateTime.now();
