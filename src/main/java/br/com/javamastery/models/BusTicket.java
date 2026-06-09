@@ -32,8 +32,8 @@ public class BusTicket {
     private LocalDate saleDate;
     @Enumerated(EnumType.STRING)
     private Category category;
-    private boolean isCancelable;
     private LocalDateTime cancelDate;
+    private boolean canceled;
     private LocalDateTime editedAt;
     private LocalDate departureDate;
 
