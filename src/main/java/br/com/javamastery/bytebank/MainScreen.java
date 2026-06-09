@@ -336,9 +336,14 @@ public class MainScreen {
                         if (now.isBefore(tripDateTime.minusHours(1))){
                             busTicketDB.setCancelDate(now);
                             busTicketDB.setCanceled(true);
+
+                            busTicketDB.getTraveler().setCreditsBalance(busTicketDB.getTicketPrice());
+
                             busTicketDao.update(busTicketDB);
 
                             em.getTransaction().commit();
+                            
+                            System.out.println("Ticket canceled, check your balance!");
                         }else
                             System.out.println("The canceling time is already over!");
 
