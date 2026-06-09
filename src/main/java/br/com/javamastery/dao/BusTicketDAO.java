@@ -4,7 +4,9 @@ import br.com.javamastery.models.BusTicket;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BusTicketDAO {
     private EntityManager em;
@@ -36,19 +38,25 @@ public class BusTicketDAO {
     }
 
     public BusTicket searchSingleTicket(BusTicket busTicketA){
-        String jpql = "SELECT bt.id FROM BusTicket bt WHERE 1=1 ";
+        StringBuilder jpql = new StringBuilder("SELECT bt.id FROM BusTicket bt WHERE 1=1 ");
 
-        if (busTicketA.getCode() != null)
-            jpql += "AND bt.code LIKE :code ";
+        Map<String, Object> params = new HashMap<>();
 
-        TypedQuery<Long> query = this.em.createQuery(jpql, Long.class);
+        if (busTicketA.getCode() != null && busTicketA.getCode().isBlank()) {
+            jpql.append("AND bt.code LIKE :code ");
+            params.put("code", busTicketA.getCode());
+        }
 
-        if (busTicketA.getTraveler().getCpf() != null)
-            query.setParameter("code", busTicketA.getCode());
+        TypedQuery<BusTicket> query = this.em.createQuery(jpql.toString(), BusTicket.class);
 
-        Long ticketId = query.setFirstResult(0).setMaxResults(1).getSingleResult();
+        if (params.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be informed.");
 
-        return this.em.find(BusTicket.class, ticketId);
+        params.forEach(query::setParameter);
+
+        List<BusTicket> results = query.getResultList();
+
+        return !results.isEmpty() ? results.getFirst() : null;
     }
 
     public List<BusTicket> searchTickets(BusTicket busTicketA){
