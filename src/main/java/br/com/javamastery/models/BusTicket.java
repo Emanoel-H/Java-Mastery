@@ -70,9 +70,10 @@ public class BusTicket {
     @Override
     public String toString() {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return String.format("Traveler: %s \nAge: %d \nCPF: %s\nBirth Date: %s" +
-                "\nOrigin City: %s \nDestination City: %s \nTicket Price %.2f \nTicket Code: %s",
+                "\nOrigin City: %s \nDestination City: %s \nTicket Price %.2f \nTicket Code: %s" +
+                        "\nDeparture Time: %s ",
                 this.traveler.getName(),
                 this.traveler.getAge(),
                 this.traveler.getCpf(),
@@ -80,6 +81,8 @@ public class BusTicket {
                 this.trip.getOriginCity().getCity(),
                 this.trip.getDestinationCity().getCity(),
                 this.ticketPrice.doubleValue(),
-                this.code);
+                this.code,
+                formatter.format(LocalDateTime.of(this.departureDate, this.trip.getDepartureTime()))
+        );
     }
 }
