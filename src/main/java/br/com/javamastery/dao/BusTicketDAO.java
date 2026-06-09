@@ -32,7 +32,7 @@ public class BusTicketDAO {
         return this.em.find(BusTicket.class, id);
     }
     public List<BusTicket> searchAll(){
-        String jpql = "SELECT bt FROM BusTicket bt";
+        String jpql = "SELECT bt FROM BusTicket bt WHERE bt.canceled IS NOT TRUE";
 
         return em.createQuery(jpql, BusTicket.class).getResultList();
     }
