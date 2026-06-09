@@ -257,7 +257,7 @@ public class BusCompanyMainScreen {
         if (choice == 1){
             boolean getBack = true;
             while (getBack) {
-                System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
+                System.out.println("Type in the code of the trip you want to alter: \n(Type 'C' to cancel) ");
                 String tripCode = sc.nextLine();
                 if (!tripCode.equalsIgnoreCase("C")) {
                     tripA.setCode(tripCode);
