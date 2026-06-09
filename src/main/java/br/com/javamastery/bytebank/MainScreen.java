@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -297,13 +298,57 @@ public class MainScreen {
         System.out.println(messageToDisplay);
         allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
 
-        if (!allTickets.isEmpty())
+        if (!allTickets.isEmpty()) {
             updateTicket();
-
-        System.out.println("Do you wish to cancel a trip?");
+            cancelTicket(busTicketA, busTicketDao, em);
+        }
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("""
+                Do you wish to cancel a trip?
+                0 - No
+                1 - Yes
+                """);
+        String cancelChoice = sc.nextLine();
+
+        if (cancelChoice.equals("1") || cancelChoice.equalsIgnoreCase("Yes")){
+            boolean getBack = true;
+            while (getBack) {
+                System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
+                String tripCode = sc.nextLine();
+                if (!tripCode.equalsIgnoreCase("C")) {
+                    busTicketA.setCode(tripCode);
+                    BusTicket busTicketDB = busTicketDao.searchSingleTicket(busTicketA);
+
+                    if (busTicketDB == null)
+                        throw new IllegalArgumentException("Type in a valid code!");
+                    else {
+                        LocalDateTime tripDateTime = LocalDateTime.of(busTicketDB.getDepartureDate(),
+                                busTicketDB.getTrip().getDepartureTime());
+
+                        LocalDateTime now = LocalDateTime.now();
+
+                        if (now.isBefore(tripDateTime.minusHours(1))){
+                            busTicketDB.setCancelDate(now);
+                            busTicketDB.setCanceled(true);
+                            busTicketDao.update(busTicketDB);
+
+                            em.getTransaction().commit();
+                        }else
+                            System.out.println("The canceling time is already over!");
+
+                        getBack = false;
+                    }
+                }else
+                    getBack = false;
+
+            }
+        }
     }
 
     private static void buyBusTickets(Traveler traveler) {
