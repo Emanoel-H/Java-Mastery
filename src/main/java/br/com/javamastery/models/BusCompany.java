@@ -23,22 +23,6 @@ public class BusCompany {
     private LocalDateTime createdAt;
     private LocalDateTime editedAt;
 
-    private static String telephoneFormatter(String telephone){
-        if (telephone.length() == 11)
-            return telephone.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
-        else if (telephone.length() == 10)
-            return telephone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
-        else
-            return telephone;
-    }
-
-    private static String cnpjFormatter(String cnpj){
-        if (cnpj.length() == 14)
-            return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
-        else
-            return cnpj;
-    }
-
     @PrePersist
     public void prePersistOperations(){
         this.createdAt = LocalDateTime.now();
@@ -50,6 +34,34 @@ public class BusCompany {
         this.editedAt = LocalDateTime.now();
     }
 
+    public String getTelephone() {
+        if (telephone.length() == 11)
+            return telephone.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
+        else if (telephone.length() == 10)
+            return telephone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
+        else
+            return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        int length = telephone.replaceAll("\\D", "").trim().length();
+        if (length == 11 || length == 10)
+            this.telephone = telephone;
+        else
+            throw new IllegalArgumentException("Telephone format invalid");
+    }
+
+    public void setCnpj(String cnpj) {
+        if (cnpj.replaceAll("\\D",  "").trim().length() == 14)
+            this.cnpj = cnpj;
+        else
+            throw new IllegalArgumentException("CNPJ format invalid");
+    }
+
+    public String getCnpj() {
+        return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+    }
+
     @Override
     public String toString() {
         return """
@@ -57,6 +69,6 @@ public class BusCompany {
                 Trading Name: %s
                 CNPJ: %s
                 Telephone: %s
-                """.formatted(this.legalName, this.tradingName, cnpjFormatter(this.cnpj), telephoneFormatter(this.telephone));
+                """.formatted(this.legalName, this.tradingName, getCnpj(), getTelephone());
     }
 }
