@@ -54,7 +54,7 @@ public class BusCompany {
 
     public void setCnpj(String cnpj) {
         if (cnpj.replaceAll("\\D",  "").trim().length() == 14)
-            this.cnpj = cnpj;
+            this.cnpj = cnpj.replaceAll("\\D",  "").trim();
         else
             throw new IllegalArgumentException("CNPJ format invalid");
     }
