@@ -37,18 +37,19 @@ public class BusCompany {
     public String getTelephone() {
         if (telephone.length() == 11)
             return telephone.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
-        else if (telephone.length() == 10)
-            return telephone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
         else
-            return telephone;
+            return telephone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
     }
 
     public void setTelephone(String telephone) {
-        int length = telephone.replaceAll("\\D", "").trim().length();
-        if (length == 11 || length == 10)
-            this.telephone = telephone;
-        else
-            throw new IllegalArgumentException("Telephone format invalid");
+        if(telephone != null &&  !telephone.isEmpty()) {
+            int length = telephone.replaceAll("\\D", "").trim().length();
+            if (length == 11 || length == 10)
+                this.telephone = telephone.replaceAll("\\D", "").trim();
+            else
+                throw new IllegalArgumentException("Telephone length must be 11 or 10 digits");
+        }else
+            throw new IllegalArgumentException("At least one filter must be informed.");
     }
 
     public void setCnpj(String cnpj) {
