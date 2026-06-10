@@ -42,21 +42,24 @@ public class BusCompany {
     }
 
     public void setTelephone(String telephone) {
-        if(telephone != null &&  !telephone.isEmpty()) {
+        if (telephone != null &&  !telephone.isEmpty()) {
             int length = telephone.replaceAll("\\D", "").trim().length();
             if (length == 11 || length == 10)
                 this.telephone = telephone.replaceAll("\\D", "").trim();
             else
                 throw new IllegalArgumentException("Telephone length must be 11 or 10 digits");
         }else
-            throw new IllegalArgumentException("At least one filter must be informed.");
+            throw new NullPointerException("Telephone cannot be empty.");
     }
 
     public void setCnpj(String cnpj) {
-        if (cnpj.replaceAll("\\D",  "").trim().length() == 14)
-            this.cnpj = cnpj.replaceAll("\\D",  "").trim();
-        else
-            throw new IllegalArgumentException("CNPJ format invalid");
+        if (cnpj != null &&  !cnpj.isEmpty()) {
+            if (cnpj.replaceAll("\\D", "").trim().length() == 14)
+                this.cnpj = cnpj.replaceAll("\\D", "").trim();
+            else
+                throw new IllegalArgumentException("CNPJ format invalid");
+        }else
+            throw new NullPointerException("Cnpj cannot be empty.");
     }
 
     public String getCnpj() {
