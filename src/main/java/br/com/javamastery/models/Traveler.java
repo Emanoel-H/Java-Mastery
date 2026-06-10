@@ -43,7 +43,17 @@ public class Traveler {
     }
 
     public void setCpf(String cpf){
-        this.cpf = cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+        if(cpf != null &&  !cpf.isEmpty()) {
+            if (cpf.replaceAll("\\D", "").trim().length() == 11)
+                this.cpf = cpf.replaceAll("\\D", "").trim();
+            else
+                throw new IllegalArgumentException("CPF format invalid");
+        }else
+            throw new NullPointerException("CPF cannot be empty.");
+    }
+
+    public String getCpf() {
+        return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
     }
 
     private void setAge(int age){
@@ -59,12 +69,13 @@ public class Traveler {
 
     public void setTelephone(String telephone){
         if(telephone != null &&  !telephone.isEmpty()) {
-            if (telephone.length() == 11 || telephone.length() == 10) {
-                this.telephone = telephone;
-            } else
+            int length = telephone.replaceAll("\\D", "").trim().length();
+            if (length == 11 || length == 10)
+                this.telephone = telephone.replaceAll("\\D", "").trim();
+            else
                 throw new IllegalArgumentException("Telephone length must be 11 or 10 digits");
         }else
-            throw new IllegalArgumentException("Telephone cannot be null or empty");
+            throw new NullPointerException("Telephone cannot be empty.");
     }
 
     public void setCreditsBalance(BigDecimal creditsBalance) {
