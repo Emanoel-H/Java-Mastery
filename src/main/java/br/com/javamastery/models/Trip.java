@@ -1,11 +1,10 @@
 package br.com.javamastery.models;
 
 import br.com.javamastery.util.ValidationUtils;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 

@@ -4,21 +4,15 @@ import br.com.javamastery.dao.*;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class BusCompanyMainScreen {
-    static void main() {
-        BusCompany busCompany = new BusCompany();
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
@@ -28,7 +22,6 @@ public class BusCompanyMainScreen {
         boolean emailFilled = false;
         boolean accessGranted = false;
         String emailAddress, password;
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Email emailA = new Email();
         BusCompany busCompanyA;
         BusCompany busCompanyDB;

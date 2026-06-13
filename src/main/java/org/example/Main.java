@@ -10,7 +10,7 @@ public class Main {
 //        IO.println(String.format("Hello and welcome!"));
         String myName;
         Scanner sc = new Scanner(System.in);
-        IO.println("Type ur name below:");
+//        IO.println("Type ur name below:");
         myName = sc.nextLine();
 
 //        myName = "Emanoel";
@@ -19,7 +19,7 @@ public class Main {
         for (int i = 1; i <= 5; i++) {
             //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
             // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+//            IO.println("i = " + i);
         }
     }
 }

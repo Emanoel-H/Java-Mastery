@@ -4,20 +4,15 @@ import br.com.javamastery.dao.*;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
-import javax.persistence.EntityManager;
-import java.math.BigDecimal;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class MainScreen {
-    static void main() {
-//        buyBusTickets();
-//        viewTickets();
-//        updateTicket();
+    public static void main(String[] args) {
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
         EmailDAO emailDAO = new EmailDAO(em);
@@ -37,7 +32,7 @@ public class MainScreen {
             System.out.println("Please, fill up your data to log in:");
             System.out.print("Email: ");
             emailAddress = sc.nextLine();
-            emailA.setEmail(emailAddress);
+            emailA.setEmail(Objects.requireNonNull(emailAddress, "Email address cannot be null."));
 
             if (!emailDAO.emailExists(emailA)) {
                 System.out.print("""
@@ -71,7 +66,7 @@ public class MainScreen {
             if (emailFilled){
                 System.out.print("\nPassword: ");
                 password = sc.nextLine();
-                emailA.setPassword(password);
+                emailA.setPassword(Objects.requireNonNull(password, "Password cannot be null."));
 
                 if (!emailDAO.emailExists(emailA)){
                     System.out.println("Invalid password!");
@@ -141,8 +136,8 @@ public class MainScreen {
         switch (choice){
             case 1:
                 System.out.println("Type in your name: ");
-                String name = sc.nextLine();
-                travelerDB.setName(name);
+                String name = sc.nextLine().replaceAll("\\d", "");
+                travelerDB.setName(Objects.requireNonNull(name, "Cannot be empty"));
                 travelerDAO.update(travelerDB);
                 break;
             case 2:
@@ -161,7 +156,7 @@ public class MainScreen {
             case 4:
                 System.out.println("Type in your new password: ");
                 password = sc.nextLine();
-                travelerDB.getEmail().setPassword(password);
+                travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
                 travelerDAO.update(travelerDB);
                 break;
             case 5:
@@ -176,7 +171,7 @@ public class MainScreen {
         String password;
         String emailAddress;
         System.out.println("Type ur name:");
-        String name = sc.nextLine();
+        String name = sc.nextLine().replaceAll("\\d", "");
 
         System.out.println("Type ur birth date:");
         String dateFormatted = sc.nextLine();
@@ -195,11 +190,11 @@ public class MainScreen {
         String telephone = sc.nextLine();
 
         Traveler travelerA = new Traveler();
-        travelerA.setName(name);
+        travelerA.setName(Objects.requireNonNull(name, "Cannot be empty"));
         travelerA.setBirthDate(birthDate);
         travelerA.setCpf(cpf);
-        travelerA.getEmail().setEmail(emailAddress);
-        travelerA.getEmail().setPassword(password);
+        travelerA.getEmail().setEmail(Objects.requireNonNull(emailAddress, "Cannot be empty"));
+        travelerA.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
         travelerA.setTelephone(telephone);
 
         travelerDAO.save(travelerA);
@@ -246,8 +241,8 @@ public class MainScreen {
             switch (choice){
                 case 1:
                     System.out.println("Type in your name: ");
-                    String name = sc.nextLine();
-                    busTicketSought.getTraveler().setName(name);
+                    String name = sc.nextLine().replaceAll("\\d", "");
+                    busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
                     busTicketDao.update(busTicketSought);
                     break;
                 case 2:
@@ -455,14 +450,14 @@ public class MainScreen {
                 birthDate = LocalDate.parse(dateFormatted, parser);
 
                 System.out.println("Type ur CPF:");
-                cpf = sc.nextLine().replaceAll("\\D", "");
+                cpf = sc.nextLine();
             } else {
                 name = traveler.getName();
                 birthDate = traveler.getBirthDate();
                 cpf = traveler.getCpf();
             }
 
-            busTicket.getTraveler().setName(name);
+            busTicket.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
             busTicket.getTraveler().setCpf(cpf);
             busTicket.getTraveler().setBirthDate(birthDate);
 

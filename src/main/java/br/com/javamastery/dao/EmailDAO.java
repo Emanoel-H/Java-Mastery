@@ -2,8 +2,8 @@ package br.com.javamastery.dao;
 
 import br.com.javamastery.models.Email;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 public class EmailDAO {

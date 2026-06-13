@@ -5,12 +5,12 @@ import br.com.javamastery.models.City;
 import br.com.javamastery.models.State;
 import br.com.javamastery.util.JPAUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Scanner;
 
 public class AddressMainScreen {
-    static void main() {
+    public static void main(String[] args) {
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
         AddressDAO addressDAO = new AddressDAO(em);

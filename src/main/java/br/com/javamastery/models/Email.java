@@ -1,11 +1,15 @@
 package br.com.javamastery.models;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "email")
+@Getter
+@Setter
 public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,19 +20,11 @@ public class Email {
     private String password;
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)$";
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         if (Pattern.compile(EMAIL_REGEX).matcher(email).matches())
             this.email = email;
         else
             throw new IllegalArgumentException("Invalid email format.");
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {

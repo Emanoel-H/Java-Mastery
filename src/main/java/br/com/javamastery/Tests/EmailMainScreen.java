@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EmailMainScreen {
-    static void main() {
+    public static void main(String[] args) {
         String sPassword, sEmail;
         Email email = new Email();
         FlatDarkLaf.setup();
