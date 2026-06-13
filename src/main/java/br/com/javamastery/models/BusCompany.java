@@ -17,6 +17,8 @@ public class BusCompany {
     private String legalName;
     private String tradingName;
     private String cnpj;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "email_id")
     private Email email;
     private String telephone;
     private LocalDateTime createdAt;
