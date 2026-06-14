@@ -105,104 +105,7 @@ public class BusCompanyMainScreen {
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
-                            boolean exitWhile = false;
-                            while (!exitWhile){
-                                System.out.print("""
-                                What do you want to alter on your ticket?
-                                1 - Legal Name
-                                2 - Trading Name
-                                3 - Password
-                                4 - CNPJ
-                                5 - Telephone
-                                6 - Exit
-                                """);
-                                int choice = sc.nextInt();
-                                sc.nextLine();
-                                switch (choice) {
-                                    case 1:
-                                        String legalName;
-                                        do {
-                                            System.out.print("Type in your Legal Name: ");
-                                            legalName = sc.nextLine().trim();
-
-                                            if (legalName.isEmpty()) {
-                                                System.out.println("Legal name cannot be empty. Please try again.");
-                                            }
-                                        } while (legalName.isEmpty());
-
-                                        busCompanyDB.setLegalName(legalName);
-                                        busCompanyDAO.updateCompany(busCompanyDB);
-                                        em.getTransaction().commit();
-                                        break;
-                                    case 2:
-                                        String tradingName;
-                                        do {
-                                            System.out.print("Type in your Trading Name: ");
-                                            tradingName = sc.nextLine().trim();
-
-                                            if (tradingName.isEmpty()) {
-                                                System.out.println("Trading name cannot be empty. Please try again.");
-                                            }
-                                        } while (tradingName.isEmpty());
-
-                                        busCompanyDB.setTradingName(tradingName);
-                                        busCompanyDAO.updateCompany(busCompanyDB);
-                                        em.getTransaction().commit();
-                                        break;
-                                    case 3:
-                                        String newPassword;
-                                        do {
-                                            System.out.print("Type in your new Password: ");
-                                            newPassword = sc.nextLine().trim();
-
-                                            if (newPassword.isEmpty()) {
-                                                System.out.println("A password cannot be empty. Please try again.");
-                                            }
-                                        } while (newPassword.isEmpty());
-
-                                        busCompanyDB.getEmail().setPassword(newPassword);
-                                        busCompanyDAO.updateCompany(busCompanyDB);
-                                        em.getTransaction().commit();
-                                        break;
-                                    case 4:
-                                        String newCNPJ;
-                                        do {
-                                            System.out.print("Type in your new CNPJ: ");
-                                            newCNPJ = sc.nextLine().trim();
-
-                                            if (newCNPJ.isEmpty()) {
-                                                System.out.println("CNPJ cannot be empty. Please try again.");
-                                            }
-                                        } while (newCNPJ.isEmpty());
-
-                                        busCompanyDB.setCnpj(newCNPJ);
-                                        busCompanyDAO.updateCompany(busCompanyDB);
-                                        em.getTransaction().commit();
-                                        break;
-                                    case 5:
-                                        String newTelephone;
-                                        do {
-                                            System.out.print("Type in your new Telephone: ");
-                                            newTelephone = sc.nextLine().trim();
-
-                                            if (newTelephone.isEmpty()) {
-                                                System.out.println("Telephone cannot be empty. Please try again.");
-                                            }
-                                        } while (newTelephone.isEmpty());
-
-                                        busCompanyDB.setTelephone(newTelephone);
-                                        busCompanyDAO.updateCompany(busCompanyDB);
-                                        em.getTransaction().commit();
-                                        break;
-                                    case 6:
-                                        System.out.println("Exiting...");
-                                        exitWhile = true;
-                                        break;
-                                    default:
-                                        System.out.println("Type in a valid choice!");
-                                }
-                            }
-                                em.getTransaction().commit();
+                            updateProfile(sc, busCompanyDB, busCompanyDAO, em);
                             break;
                         case 4:
                             exitSystem = true;
@@ -216,6 +119,106 @@ public class BusCompanyMainScreen {
             }
         }
         em.close();
+    }
+
+    private static void updateProfile(Scanner sc, BusCompany busCompanyDB, BusCompanyDAO busCompanyDAO, EntityManager em) {
+        boolean exitWhile = false;
+        while (!exitWhile){
+            System.out.print("""
+            What do you want to alter on your ticket?
+            1 - Legal Name
+            2 - Trading Name
+            3 - Password
+            4 - CNPJ
+            5 - Telephone
+            6 - Exit
+            """);
+            int choice = sc.nextInt();
+            sc.nextLine();
+            switch (choice) {
+                case 1:
+                    String legalName;
+                    do {
+                        System.out.print("Type in your Legal Name: ");
+                        legalName = sc.nextLine().trim();
+
+                        if (legalName.isEmpty()) {
+                            System.out.println("Legal name cannot be empty. Please try again.");
+                        }
+                    } while (legalName.isEmpty());
+
+                    busCompanyDB.setLegalName(legalName);
+                    busCompanyDAO.updateCompany(busCompanyDB);
+                    em.getTransaction().commit();
+                    break;
+                case 2:
+                    String tradingName;
+                    do {
+                        System.out.print("Type in your Trading Name: ");
+                        tradingName = sc.nextLine().trim();
+
+                        if (tradingName.isEmpty()) {
+                            System.out.println("Trading name cannot be empty. Please try again.");
+                        }
+                    } while (tradingName.isEmpty());
+
+                    busCompanyDB.setTradingName(tradingName);
+                    busCompanyDAO.updateCompany(busCompanyDB);
+                    em.getTransaction().commit();
+                    break;
+                case 3:
+                    String newPassword;
+                    do {
+                        System.out.print("Type in your new Password: ");
+                        newPassword = sc.nextLine().trim();
+
+                        if (newPassword.isEmpty()) {
+                            System.out.println("A password cannot be empty. Please try again.");
+                        }
+                    } while (newPassword.isEmpty());
+
+                    busCompanyDB.getEmail().setPassword(newPassword);
+                    busCompanyDAO.updateCompany(busCompanyDB);
+                    em.getTransaction().commit();
+                    break;
+                case 4:
+                    String newCNPJ;
+                    do {
+                        System.out.print("Type in your new CNPJ: ");
+                        newCNPJ = sc.nextLine().trim();
+
+                        if (newCNPJ.isEmpty()) {
+                            System.out.println("CNPJ cannot be empty. Please try again.");
+                        }
+                    } while (newCNPJ.isEmpty());
+
+                    busCompanyDB.setCnpj(newCNPJ);
+                    busCompanyDAO.updateCompany(busCompanyDB);
+                    em.getTransaction().commit();
+                    break;
+                case 5:
+                    String newTelephone;
+                    do {
+                        System.out.print("Type in your new Telephone: ");
+                        newTelephone = sc.nextLine().trim();
+
+                        if (newTelephone.isEmpty()) {
+                            System.out.println("Telephone cannot be empty. Please try again.");
+                        }
+                    } while (newTelephone.isEmpty());
+
+                    busCompanyDB.setTelephone(newTelephone);
+                    busCompanyDAO.updateCompany(busCompanyDB);
+                    em.getTransaction().commit();
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    exitWhile = true;
+                    break;
+                default:
+                    System.out.println("Type in a valid choice!");
+            }
+        }
     }
 
     private static void viewTrips(EntityManager em, BusCompany busCompanyDB) {
