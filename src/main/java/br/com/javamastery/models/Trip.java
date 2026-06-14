@@ -33,6 +33,13 @@ public class Trip {
     private boolean active = true;
     private double distanceKM;
 
+    public Trip() {
+        this.originCity = new City();
+        this.destinationCity = new City();
+        this.busCompany = new BusCompany();
+        this.price = BigDecimal.ZERO;
+    }
+
     @PrePersist
     public void prePersistOperations(){
         if (this.distanceKM == 0 && this.originCity != null && this.destinationCity != null)
