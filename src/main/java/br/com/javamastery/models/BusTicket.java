@@ -37,6 +37,11 @@ public class BusTicket {
     private LocalDateTime editedAt;
     private LocalDate departureDate;
 
+    public BusTicket() {
+        this.traveler = new Traveler();
+        this.trip = new Trip();
+    }
+
     @PrePersist
     public void prePersistOperations(){
         if (this.code == null){
