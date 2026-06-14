@@ -124,6 +124,7 @@ public class BusCompanyMainScreen {
     private static void updateProfile(Scanner sc, BusCompany busCompanyDB, BusCompanyDAO busCompanyDAO, EntityManager em) {
         boolean exitWhile = false;
         while (!exitWhile){
+            System.out.println(busCompanyDB);
             System.out.print("""
             What do you want to alter on your ticket?
             1 - Legal Name
