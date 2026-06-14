@@ -24,6 +24,10 @@ public class BusCompany {
     private LocalDateTime createdAt;
     private LocalDateTime editedAt;
 
+    public BusCompany() {
+        this.email = new Email();
+    }
+
     @PrePersist
     public void prePersistOperations(){
         this.createdAt = LocalDateTime.now();
