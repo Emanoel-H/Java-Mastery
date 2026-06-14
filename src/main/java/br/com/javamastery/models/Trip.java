@@ -18,7 +18,11 @@ public class Trip {
     private Long id;
     @Column(name = "code", length = 10, unique = true)
     private String code;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "originCity_id")
     private City originCity;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "destinationCity_id")
     private City destinationCity;
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
