@@ -224,18 +224,22 @@ public class BusCompanyMainScreen {
         tripA.setBusCompany(busCompanyDB);
 
         List<Trip> allTrips = tripDAO.searchTrips(tripA);
-        String messageToDisplay = "Here is your trip: ";
-
-        if (allTrips.size() > 1)
-            messageToDisplay = "Here are your trips: ";
-
-        System.out.println(messageToDisplay);
-        allTrips.forEach(t2 -> System.out.println(t2.toString()));
 
         if (!allTrips.isEmpty()) {
-            editTrip(em, tripA, tripDAO);
-            deleteTrip(em, tripA, tripDAO);
-        }
+            String messageToDisplay = "Here is your trip: ";
+
+            if (allTrips.size() > 1)
+                messageToDisplay = "Here are your trips: ";
+
+            System.out.println(messageToDisplay);
+            allTrips.forEach(t2 -> System.out.println(t2.toString()));
+
+            if (!allTrips.isEmpty()) {
+                editTrip(em, tripA, tripDAO);
+                deleteTrip(em, tripA, tripDAO);
+            }
+        }else
+            System.out.println("There is no trips in the database yet!");
     }
 
     private static void deleteTrip(EntityManager em, Trip tripA, TripDAO tripDAO) {
