@@ -522,7 +522,7 @@ public class BusCompanyMainScreen {
                 String finalStateName = stateName;
                 if (allStates.stream().noneMatch(s -> s.getName().trim().equalsIgnoreCase(finalStateName.trim()))) {
                     stateName = "";
-                    throw new IllegalArgumentException("Type in a valid value!");
+                    System.out.println("Type in a valid value!");
                 }else {
                     stateName = allStates
                             .stream()
@@ -535,7 +535,7 @@ public class BusCompanyMainScreen {
                 String finalStateUF = stateName;
                 if (allStates.stream().noneMatch(s -> s.getUf().equals(finalStateUF))){
                     stateName = "";
-                    throw new IllegalArgumentException("Type in a valid value!");
+                    System.out.println("Type in a valid value!");
                 }else {
                     stateName = allStates
                             .stream()
