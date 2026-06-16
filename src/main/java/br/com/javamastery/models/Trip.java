@@ -107,13 +107,13 @@ public class Trip {
                 Trip Code: %s
                 Origin City: %s
                 Destination City: %s
-                Distance: %.2f
+                Distance: %.2f KM
                 Travel time: %s
                 Trip Type: %s
                 Price: %.2f
                 """.formatted(this.code,
                 this.originCity.getCity(),
-                this.originCity.getCity(),
+                this.destinationCity.getCity(),
                 this.distanceKM,
                 distanceToHours(),
                 this.category.toString(),
