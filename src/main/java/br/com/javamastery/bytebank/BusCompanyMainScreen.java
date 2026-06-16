@@ -480,6 +480,7 @@ public class BusCompanyMainScreen {
             while (!getBack) {
                 System.out.println("Type in the price of the trip: ");
                 tripPrice = sc.nextBigDecimal();
+                sc.nextLine();
 
                 if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
                     throw new RuntimeException("The Trip price must be a value higher than 0");
