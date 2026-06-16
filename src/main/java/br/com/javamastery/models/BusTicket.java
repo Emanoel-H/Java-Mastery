@@ -30,8 +30,6 @@ public class BusTicket {
     private String code;
     @Column(name = "sale_date")
     private LocalDate saleDate;
-    @Enumerated(EnumType.STRING)
-    private Category category;
     private LocalDateTime cancelDate;
     private boolean canceled;
     private LocalDateTime editedAt;
