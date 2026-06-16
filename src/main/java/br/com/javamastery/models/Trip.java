@@ -109,12 +109,14 @@ public class Trip {
                 Destination City: %s
                 Distance: %.2f
                 Travel time: %s
+                Trip Type: %s
                 Price: %.2f
                 """.formatted(this.code,
                 this.originCity.getCity(),
                 this.originCity.getCity(),
                 this.distanceKM,
                 distanceToHours(),
+                this.category.toString(),
                 this.price);
     }
 }
