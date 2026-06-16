@@ -32,6 +32,8 @@ public class Trip {
     private LocalTime departureTime;
     private boolean active = true;
     private double distanceKM;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     public Trip() {
         this.originCity = new City();
