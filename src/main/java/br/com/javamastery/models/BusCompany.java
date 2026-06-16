@@ -32,6 +32,7 @@ public class BusCompany {
     public void prePersistOperations(){
         this.createdAt = LocalDateTime.now();
         this.editedAt = LocalDateTime.now();
+        this.email.setEmailType(EmailType.BUSINESS);
     }
 
     @PreUpdate
