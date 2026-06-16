@@ -512,6 +512,7 @@ public class BusCompanyMainScreen {
 
     private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
         City cityDB = null;
+        cityName = "";
         while (stateName.isEmpty()) {
             System.out.println("From which state do you want to search the cities?");
             List<State> allStates = addressDAO.searchAllState();
