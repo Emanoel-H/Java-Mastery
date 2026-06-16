@@ -19,6 +19,8 @@ public class Email {
     @Column(length = 16, nullable = false)
     private String password;
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)$";
+    @Enumerated(EnumType.STRING)
+    private EmailType emailType;
 
     public void setEmail(String email) {
         if (Pattern.compile(EMAIL_REGEX).matcher(email).matches())
