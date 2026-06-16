@@ -49,6 +49,13 @@ public class Trip {
 
         if (this.code == null)
             this.code = ValidationUtils.generateRamdomCode(10);
+
+        if (this.originCity != null && this.destinationCity != null) {
+            if (this.originCity.getState().getUf().equals(this.destinationCity.getState().getUf()))
+                this.category = Category.INTERCITY;
+            else
+                this.category = Category.INTERSTATE;
+        }            
     }
 
     public static double calculateHaversine(City originCity, City destinationCity) {
