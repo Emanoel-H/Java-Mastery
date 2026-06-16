@@ -55,7 +55,7 @@ public class Trip {
                 this.category = Category.INTERCITY;
             else
                 this.category = Category.INTERSTATE;
-        }            
+        }
     }
 
     public static double calculateHaversine(City originCity, City destinationCity) {
