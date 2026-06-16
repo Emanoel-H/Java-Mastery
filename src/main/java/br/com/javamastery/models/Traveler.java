@@ -85,6 +85,7 @@ public class Traveler {
     public void prePersistOperations(){
         this.createdAt = LocalDateTime.now();
         this.editedAt = LocalDateTime.now();
+        this.email.setEmailType(EmailType.PERSONAL);
     }
 
     @PreUpdate
