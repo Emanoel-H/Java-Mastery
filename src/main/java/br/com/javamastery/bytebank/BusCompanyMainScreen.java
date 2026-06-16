@@ -553,7 +553,7 @@ public class BusCompanyMainScreen {
                 List<City> citiesByState = addressDAO.searchCitiesByState(stateName);
                 System.out.printf("Cities from the state %s\n", stateName);
                 citiesByState.forEach(c -> System.out.println(c.toString()));
-                System.out.println("Type in the city your selected city:");
+                System.out.println("Type in your selected city:");
                 cityName = sc.nextLine();
 
                 if (!cityName.isEmpty()) {
