@@ -63,7 +63,7 @@ public class Trip {
         if (this.originCity != null && this.destinationCity != null)
             this.distanceKM = osrmClient.getRealDistanceKM(this.originCity, this.destinationCity);
     }
-    
+
     public static double calculateHaversine(City originCity, City destinationCity) {
         final int earthRadius = 6371;
 

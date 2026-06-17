@@ -1,5 +1,6 @@
 package br.com.javamastery.bytebank;
 
+import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
@@ -424,6 +425,7 @@ public class BusCompanyMainScreen {
         City cityA = new City();
         City cityDB;
         boolean getBack;
+        OsrmClient osrmClient = new OsrmClient();
 
         cityName = "";
         while (cityName.isEmpty()) {
@@ -465,7 +467,8 @@ public class BusCompanyMainScreen {
             }
         }
 
-        double suggestedPrice = Trip.calculateHaversine(trip.getOriginCity(), trip.getDestinationCity()) * 0.2;
+        trip.calculateRealDistance(osrmClient);
+        double suggestedPrice = trip.getDistanceKM() * 0.2;
 
         System.out.printf("""
                 Suggested price based on distance in KM: R$ %.2f
