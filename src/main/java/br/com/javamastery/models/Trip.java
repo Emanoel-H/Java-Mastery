@@ -1,5 +1,6 @@
 package br.com.javamastery.models;
 
+import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.util.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -58,6 +59,11 @@ public class Trip {
         }
     }
 
+    public void calculateRealDistance(OsrmClient osrmClient){
+        if (this.originCity != null && this.destinationCity != null)
+            this.distanceKM = osrmClient.getRealDistanceKM(this.originCity, this.destinationCity);
+    }
+    
     public static double calculateHaversine(City originCity, City destinationCity) {
         final int earthRadius = 6371;
 
