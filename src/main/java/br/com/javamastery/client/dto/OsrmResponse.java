@@ -15,6 +15,7 @@ public class OsrmResponse {
 
     @Setter
     @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Route {
         private double distance;
         private double duration;
