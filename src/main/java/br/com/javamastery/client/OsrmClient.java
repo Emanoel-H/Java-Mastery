@@ -21,11 +21,11 @@ public class OsrmClient {
     }
 
     public double getRealDistanceKM(City origin, City destination) {
-        String url = BASE_URL + "%s,%s;%s,%s?overview=false".formatted(
-                origin.getLongitude(),
-                origin.getLatitude(),
-                destination.getLongitude(),
-                destination.getLatitude());
+        String url = BASE_URL + origin.getLongitude() + "," +
+                origin.getLatitude() + ";" +
+                destination.getLongitude() + "," +
+                destination.getLatitude() +
+                "?overview=false";
 
         try {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
