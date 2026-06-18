@@ -50,8 +50,7 @@ public class BusCompanyMainScreen {
                         emailFilled = false;
                         break;
                     case 2:
-                        signUp(sc, busCompanyDAO);
-                        em.getTransaction().commit();
+                        signUp(sc, busCompanyDAO, em);
                         emailFilled = false;
                         break;
                     case 3:
@@ -94,7 +93,6 @@ public class BusCompanyMainScreen {
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
                             createTrip(em, sc, busCompanyDB);
-                            em.getTransaction().commit();
                             break;
                         case 2:
                             busCompanyA = new BusCompany();
@@ -150,6 +148,8 @@ public class BusCompanyMainScreen {
                     } while (legalName.isEmpty());
 
                     busCompanyDB.setLegalName(legalName);
+
+                    em.getTransaction().begin();
                     busCompanyDAO.updateCompany(busCompanyDB);
                     em.getTransaction().commit();
                     break;
@@ -165,6 +165,8 @@ public class BusCompanyMainScreen {
                     } while (tradingName.isEmpty());
 
                     busCompanyDB.setTradingName(tradingName);
+
+                    em.getTransaction().begin();
                     busCompanyDAO.updateCompany(busCompanyDB);
                     em.getTransaction().commit();
                     break;
@@ -180,6 +182,8 @@ public class BusCompanyMainScreen {
                     } while (newPassword.isEmpty());
 
                     busCompanyDB.getEmail().setPassword(newPassword);
+
+                    em.getTransaction().begin();
                     busCompanyDAO.updateCompany(busCompanyDB);
                     em.getTransaction().commit();
                     break;
@@ -195,6 +199,8 @@ public class BusCompanyMainScreen {
                     } while (newCNPJ.isEmpty());
 
                     busCompanyDB.setCnpj(newCNPJ);
+
+                    em.getTransaction().begin();
                     busCompanyDAO.updateCompany(busCompanyDB);
                     em.getTransaction().commit();
                     break;
@@ -210,6 +216,8 @@ public class BusCompanyMainScreen {
                     } while (newTelephone.isEmpty());
 
                     busCompanyDB.setTelephone(newTelephone);
+
+                    em.getTransaction().begin();
                     busCompanyDAO.updateCompany(busCompanyDB);
                     em.getTransaction().commit();
                     break;
@@ -269,6 +277,7 @@ public class BusCompanyMainScreen {
                     if (tripDB == null)
                         throw new IllegalArgumentException("Type in a valid code!");
                     else {
+                        em.getTransaction().begin();
                         tripDAO.delete(tripDB);
                         em.getTransaction().commit();
                         getBack = false;
@@ -343,6 +352,7 @@ public class BusCompanyMainScreen {
                             }
                         }
                         if (tripDB.getOriginCity() != null) {
+                            em.getTransaction().begin();
                             tripDAO.updateTrip(tripDB);
                             em.getTransaction().commit();
                         }
@@ -369,6 +379,7 @@ public class BusCompanyMainScreen {
                         }
 
                         if (tripDB.getDestinationCity() != null) {
+                            em.getTransaction().begin();
                             tripDAO.updateTrip(tripDB);
                             em.getTransaction().commit();
                         }
@@ -382,6 +393,8 @@ public class BusCompanyMainScreen {
                             try {
                                 LocalTime departureTime = LocalTime.parse(departureTimeString);
                                 tripDB.setDepartureTime(departureTime);
+
+                                em.getTransaction().begin();
                                 tripDAO.updateTrip(tripDB);
                                 em.getTransaction().commit();
                                 getBackTime = true;
@@ -400,6 +413,8 @@ public class BusCompanyMainScreen {
                                 throw new RuntimeException("The Trip price must be a value higher than 0");
                             else {
                                 tripDB.setPrice(tripPrice);
+
+                                em.getTransaction().begin();
                                 tripDAO.updateTrip(tripDB);
                                 em.getTransaction().commit();
                                 getBackPrice = true;
@@ -512,7 +527,9 @@ public class BusCompanyMainScreen {
 
         trip.setBusCompany(busCompanyDB);
 
+        em.getTransaction().begin();
         tripDAO.save(trip);
+        em.getTransaction().commit();
     }
 
     private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
@@ -578,7 +595,7 @@ public class BusCompanyMainScreen {
         return cityDB;
     }
 
-    private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO) {
+    private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em) {
         String password;
         String emailAddress;
         System.out.println("Type your Legal Name:");
@@ -607,6 +624,8 @@ public class BusCompanyMainScreen {
         busCompany.getEmail().setEmail(emailAddress);
         busCompany.getEmail().setPassword(password);
 
+        em.getTransaction().begin();
         busCompanyDAO.save(busCompany);
+        em.getTransaction().commit();
     }
 }
