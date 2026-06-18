@@ -31,7 +31,7 @@ public class BusTicket {
     @Column(name = "sale_date")
     private LocalDate saleDate;
     private LocalDateTime cancelDate;
-    private boolean canceled;
+    private boolean canceled = false;
     private LocalDateTime editedAt;
     private LocalDate departureDate;
 
