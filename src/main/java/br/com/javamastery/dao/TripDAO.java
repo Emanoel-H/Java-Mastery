@@ -86,6 +86,9 @@ public class TripDAO {
     }
 
     public void delete(Trip tripA){
+        if (isTripActive(tripA))
+            throw new RuntimeException("You can't delete a trip that is already related to a sale");
+
         tripA = em.merge(tripA);
         this.em.remove(tripA);
     }
