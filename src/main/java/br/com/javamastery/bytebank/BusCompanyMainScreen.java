@@ -255,6 +255,7 @@ public class BusCompanyMainScreen {
                 1 - Yes
                 """);
         int choice = sc.nextInt();
+        sc.nextLine();
 
         if (choice == 1){
             boolean getBack = true;
