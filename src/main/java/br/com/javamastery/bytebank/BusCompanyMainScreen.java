@@ -469,7 +469,7 @@ public class BusCompanyMainScreen {
         }
 
         trip.calculateRealDistance(osrmClient);
-        double suggestedPrice = trip.getDistanceKM() * 0.2;
+        double suggestedPrice = trip.getDistanceKM() * 0.35;
 
         System.out.printf("""
                 Suggested price based on distance in KM: R$ %.2f
