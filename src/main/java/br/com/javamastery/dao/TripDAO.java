@@ -1,5 +1,6 @@
 package br.com.javamastery.dao;
 
+import br.com.javamastery.models.BusTicket;
 import br.com.javamastery.models.Trip;
 
 import jakarta.persistence.EntityManager;
@@ -87,5 +88,26 @@ public class TripDAO {
     public void delete(Trip tripA){
         tripA = em.merge(tripA);
         this.em.remove(tripA);
+    }
+
+    public boolean isTripActive(Trip tripA){
+        StringBuilder jpql = new StringBuilder("SELECT bt.id FROM BusTicket bt WHERE 1=1 ");
+
+        Map<String, Object> params = new HashMap<>();
+
+        if (tripA.getCode() != null && !tripA.getCode().isBlank()) {
+            jpql.append("AND bt.trip.code = :code ");
+            params.put("code", tripA.getCode());
+        }
+
+        jpql.append("AND bt.canceled = 0 ");
+
+        TypedQuery<BusTicket> query = this.em.createQuery(jpql.toString(), BusTicket.class);
+
+        params.forEach(query::setParameter);
+
+        List<BusTicket> tickets = query.getResultList();
+
+        return !tickets.isEmpty();
     }
 }
