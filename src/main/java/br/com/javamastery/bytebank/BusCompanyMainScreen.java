@@ -288,7 +288,7 @@ public class BusCompanyMainScreen {
         City cityDB;
         Scanner sc = new Scanner(System.in);
         System.out.print("""
-            Do you want to alter an info from your bus ticket?
+            Do you want to alter an info from a trip?
             1 - Yes
             2 - No
             """);
@@ -298,7 +298,7 @@ public class BusCompanyMainScreen {
             getBack = true;
             Trip tripDB = null;
             while (getBack) {
-                System.out.println("Type in the code of the ticket you want to alter: ");
+                System.out.println("Type in the code of the trip you want to alter: ");
                 String tripCode = sc.nextLine();
                 tripA.setCode(tripCode);
                 tripDB = tripDAO.searchSingleTrip(tripA);
@@ -312,7 +312,7 @@ public class BusCompanyMainScreen {
             boolean exitWhile = false;
             while (!exitWhile) {
                 System.out.print("""
-                    What do you want to alter on your ticket?
+                    What do you want to alter on your trip?
                     1- Origin City
                     2- Destination City
                     3- Departure Time
