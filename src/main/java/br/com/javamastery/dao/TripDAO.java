@@ -103,8 +103,6 @@ public class TripDAO {
             params.put("code", tripA.getCode());
         }
 
-        jpql.append("AND bt.canceled = 0 ");
-
         TypedQuery<BusTicket> query = this.em.createQuery(jpql.toString(), BusTicket.class);
 
         params.forEach(query::setParameter);
