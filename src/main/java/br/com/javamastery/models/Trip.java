@@ -65,6 +65,7 @@ public class Trip {
         this.editedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
     public void preUpdateOperations(){
         if (this.distanceKM == 0 && this.originCity != null && this.destinationCity != null)
             this.distanceKM = calculateHaversine(this.originCity, this.destinationCity);
