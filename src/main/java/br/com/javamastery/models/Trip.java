@@ -60,10 +60,13 @@ public class Trip {
             else
                 this.category = Category.INTERSTATE;
         }
+
+        this.createdAt = LocalDateTime.now();
+        this.editedAt = LocalDateTime.now();
     }
 
     public void preUpdateOperations(){
-            
+        this.editedAt = LocalDateTime.now();
     }
 
     public void calculateRealDistance(OsrmClient osrmClient){
