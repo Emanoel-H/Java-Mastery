@@ -293,6 +293,7 @@ public class BusCompanyMainScreen {
         AddressDAO addressDAO = new AddressDAO(em);
         City cityA = new City();
         City cityDB;
+        OsrmClient osrmClient = new OsrmClient();
         Scanner sc = new Scanner(System.in);
         System.out.print("""
             Do you want to alter an info from a trip?
@@ -349,6 +350,10 @@ public class BusCompanyMainScreen {
                                 }
                             }
                         }
+
+                        tripDB.calculateRealDistance(osrmClient);
+                        tripDB.setPrice(BigDecimal.valueOf(tripDB.getDistanceKM() * 0.35));
+
                         if (tripDB.getOriginCity() != null) {
                             em.getTransaction().begin();
                             tripDAO.updateTrip(tripDB);
@@ -375,6 +380,9 @@ public class BusCompanyMainScreen {
                                 }
                             }
                         }
+
+                        tripDB.calculateRealDistance(osrmClient);
+                        tripDB.setPrice(BigDecimal.valueOf(tripDB.getDistanceKM() * 0.35));
 
                         if (tripDB.getDestinationCity() != null) {
                             em.getTransaction().begin();
