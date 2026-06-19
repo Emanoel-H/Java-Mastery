@@ -59,6 +59,10 @@ public class Trip {
         }
     }
 
+    public void preUpdateOperations(){
+        
+    }
+
     public void calculateRealDistance(OsrmClient osrmClient){
         if (this.originCity != null && this.destinationCity != null)
             this.distanceKM = osrmClient.getRealDistanceKM(this.originCity, this.destinationCity);
