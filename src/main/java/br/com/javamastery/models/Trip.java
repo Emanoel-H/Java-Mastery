@@ -66,6 +66,16 @@ public class Trip {
     }
 
     public void preUpdateOperations(){
+        if (this.distanceKM == 0 && this.originCity != null && this.destinationCity != null)
+            this.distanceKM = calculateHaversine(this.originCity, this.destinationCity);
+
+        if (this.originCity != null && this.destinationCity != null) {
+            if (this.originCity.getState().getUf().equals(this.destinationCity.getState().getUf()))
+                this.category = Category.INTERCITY;
+            else
+                this.category = Category.INTERSTATE;
+        }
+
         this.editedAt = LocalDateTime.now();
     }
 
