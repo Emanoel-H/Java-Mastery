@@ -27,8 +27,6 @@ public class BusCompanyMainScreen {
         BusCompany busCompanyA;
         BusCompany busCompanyDB;
 
-        em.getTransaction().begin();
-
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
             System.out.print("Email: ");
