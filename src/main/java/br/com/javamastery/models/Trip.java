@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -35,6 +36,8 @@ public class Trip {
     private double distanceKM;
     @Enumerated(EnumType.STRING)
     private Category category;
+    private LocalDateTime createdAt;
+    private LocalDateTime editedAt;
 
     public Trip() {
         this.originCity = new City();
@@ -60,7 +63,7 @@ public class Trip {
     }
 
     public void preUpdateOperations(){
-        
+            
     }
 
     public void calculateRealDistance(OsrmClient osrmClient){
