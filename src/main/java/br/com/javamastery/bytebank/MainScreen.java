@@ -286,6 +286,12 @@ public class MainScreen {
         Traveler travelerA = new Traveler();
         travelerA.setEmail(email);
         TravelerDAO travelerDAO = new TravelerDAO(em);
+        Scanner sc = new  Scanner(System.in);
+
+        System.out.println("Do you wish to also view the canceled tickets? \n0- No \n1- Yes");
+        String canceledTickets = sc.nextLine();
+
+        busTicketA.setCanceled(canceledTickets.trim().replaceAll("\\D", "").equals("1") || canceledTickets.trim().replaceAll("\\d", "").equalsIgnoreCase("Yes"));
 
         busTicketA.getTraveler().setId(travelerDAO.searchPerson(travelerA).getId());
         List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
