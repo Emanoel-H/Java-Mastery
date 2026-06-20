@@ -287,7 +287,7 @@ public class MainScreen {
         travelerA.setEmail(email);
         TravelerDAO travelerDAO = new TravelerDAO(em);
 
-        busTicketA.getTraveler().setCpf(travelerDAO.searchPerson(travelerA).getCpf());
+        busTicketA.getTraveler().setId(travelerDAO.searchPerson(travelerA).getId());
         List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
         String messageToDisplay = "Here is your ticket: ";
 
