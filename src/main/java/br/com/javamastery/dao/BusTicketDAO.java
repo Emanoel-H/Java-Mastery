@@ -42,7 +42,7 @@ public class BusTicketDAO {
 
         Map<String, Object> params = new HashMap<>();
 
-        if (busTicketA.getCode() != null && busTicketA.getCode().isBlank()) {
+        if (busTicketA.getCode() != null && !busTicketA.getCode().isBlank()) {
             jpql.append("AND bt.code LIKE :code ");
             params.put("code", busTicketA.getCode());
         }
