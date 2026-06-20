@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class BusCompanyMainScreen {
@@ -623,12 +624,12 @@ public class BusCompanyMainScreen {
         password = sc.nextLine();
 
         BusCompany busCompany = new BusCompany();
-        busCompany.setLegalName(legalName);
-        busCompany.setTradingName(tradingName);
+        busCompany.setLegalName(Objects.requireNonNull(legalName, "Cannot be empty"));
+        busCompany.setTradingName(Objects.requireNonNull(tradingName, "Cannot be empty"));
         busCompany.setCnpj(cnpj);
         busCompany.setTelephone(telephone);
-        busCompany.getEmail().setEmail(emailAddress);
-        busCompany.getEmail().setPassword(password);
+        busCompany.getEmail().setEmail(Objects.requireNonNull(emailAddress, "Cannot be empty"));
+        busCompany.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
 
         em.getTransaction().begin();
         busCompanyDAO.save(busCompany);
