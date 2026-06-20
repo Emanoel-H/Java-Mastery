@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "traveler")
@@ -91,5 +92,24 @@ public class Traveler {
     @PreUpdate
     public void preUpdateOperations(){
         this.editedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("""
+                Name: %s
+                CPF: %s
+                Telephone: %s
+                Birth Date: %s
+                Age: %d
+                Credits Balance: $%.2f
+                """,
+                getName(),
+                getCpf(),
+                getTelephone(),
+                parser.format(getBirthDate()),
+                getAge(),
+                getCreditsBalance());
     }
 }
