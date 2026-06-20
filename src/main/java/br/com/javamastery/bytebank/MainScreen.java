@@ -96,7 +96,7 @@ public class MainScreen {
                             viewTickets(emailA, em);
                             break;
                         case 3:
-                            updateProfile(emailA, travelerDAO, sc, parser, em);
+                            updateProfile(emailA, travelerDAO, sc, parser, em, exitSystem);
                             break;
                         case 4:
                             exitSystem = true;
@@ -105,14 +105,13 @@ public class MainScreen {
                             System.out.println("Type in a valid answer!");
                             exitSystem = true;
                     }
-
                 }
             }
         }
         em.close();
     }
 
-    private static void updateProfile(Email emailA, TravelerDAO travelerDAO, Scanner sc, DateTimeFormatter parser, EntityManager em) {
+    private static void updateProfile(Email emailA, TravelerDAO travelerDAO, Scanner sc, DateTimeFormatter parser, EntityManager em, boolean exitSystem) {
         String password;
         Traveler travelerA;
         Traveler travelerDB;
@@ -128,9 +127,10 @@ public class MainScreen {
                     1 - Traveler's name
                     2 - Traveler's CPF
                     3 - Traveler's birth date
-                    4 - Password
-                    5 - Delete Profile
-                    6 - Exit
+                    4 - Traveler's Telephone
+                    5 - Password
+                    6 - Delete Profile
+                    7 - Exit
                     """);
             int choice = sc.nextInt();
             sc.nextLine();
@@ -149,7 +149,10 @@ public class MainScreen {
                     System.out.println("Type in your CPF: ");
                     String cpf = sc.nextLine();
                     travelerDB.setCpf(cpf);
+
+                    em.getTransaction().begin();
                     travelerDAO.update(travelerDB);
+                    em.getTransaction().commit();
                     break;
                 case 3:
                     System.out.println("Type in your birth date: ");
@@ -162,6 +165,15 @@ public class MainScreen {
                     em.getTransaction().commit();
                     break;
                 case 4:
+                    System.out.println("Type in your telephone: ");
+                    String telephone = sc.nextLine();
+                    travelerDB.setTelephone(telephone);
+
+                    em.getTransaction().begin();
+                    travelerDAO.update(travelerDB);
+                    em.getTransaction().commit();
+                    break;
+                case 5:
                     System.out.println("Type in your new password: ");
                     password = sc.nextLine();
                     travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
@@ -170,12 +182,14 @@ public class MainScreen {
                     travelerDAO.update(travelerDB);
                     em.getTransaction().commit();
                     break;
-                case 5:
+                case 6:
                     em.getTransaction().begin();
                     travelerDAO.delete(travelerDB);
                     em.getTransaction().commit();
+                    exitWhile = true;
+                    exitSystem = exitWhile;
                     break;
-                case 6:
+                case 7:
                     System.out.println("Exiting...");
                     exitWhile = true;
                     break;
