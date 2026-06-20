@@ -119,59 +119,68 @@ public class MainScreen {
         travelerA = new Traveler();
         travelerA.setEmail(emailA);
         travelerDB = travelerDAO.searchPerson(travelerA);
-        System.out.print("""
-        What do you want to alter on your profile?
-        1 - Traveler's name
-        2 - Traveler's CPF
-        3 - Traveler's birth date
-        4 - Password
-        5 - Delete Profile
-        """);
-        int choice = sc.nextInt();
-        sc.nextLine();
 
-        switch (choice){
-            case 1:
-                System.out.println("Type in your name: ");
-                String name = sc.nextLine().replaceAll("\\d", "");
-                travelerDB.setName(Objects.requireNonNull(name, "Cannot be empty"));
+        boolean exitWhile = false;
+        while (!exitWhile) {
+            System.out.print("""
+                    What do you want to alter on your profile?
+                    1 - Traveler's name
+                    2 - Traveler's CPF
+                    3 - Traveler's birth date
+                    4 - Password
+                    5 - Delete Profile
+                    6 - Exit
+                    """);
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-                em.getTransaction().begin();
-                travelerDAO.update(travelerDB);
-                em.getTransaction().commit();
-                break;
-            case 2:
-                System.out.println("Type in your CPF: ");
-                String cpf = sc.nextLine();
-                travelerDB.setCpf(cpf);
-                travelerDAO.update(travelerDB);
-                break;
-            case 3:
-                System.out.println("Type in your birth date: ");
-                String dateFormatted = sc.nextLine();
-                LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
-                travelerDB.setBirthDate(birthDate);
+            switch (choice) {
+                case 1:
+                    System.out.println("Type in your name: ");
+                    String name = sc.nextLine().replaceAll("\\d", "");
+                    travelerDB.setName(Objects.requireNonNull(name, "Cannot be empty"));
 
-                em.getTransaction().begin();
-                travelerDAO.update(travelerDB);
-                em.getTransaction().commit();
-                break;
-            case 4:
-                System.out.println("Type in your new password: ");
-                password = sc.nextLine();
-                travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
+                    em.getTransaction().begin();
+                    travelerDAO.update(travelerDB);
+                    em.getTransaction().commit();
+                    break;
+                case 2:
+                    System.out.println("Type in your CPF: ");
+                    String cpf = sc.nextLine();
+                    travelerDB.setCpf(cpf);
+                    travelerDAO.update(travelerDB);
+                    break;
+                case 3:
+                    System.out.println("Type in your birth date: ");
+                    String dateFormatted = sc.nextLine();
+                    LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
+                    travelerDB.setBirthDate(birthDate);
 
-                em.getTransaction().begin();
-                travelerDAO.update(travelerDB);
-                em.getTransaction().commit();
-                break;
-            case 5:
-                em.getTransaction().begin();
-                travelerDAO.delete(travelerDB);
-                em.getTransaction().commit();
-                break;
-            default:
-                System.out.println("Type in a valid answer!");
+                    em.getTransaction().begin();
+                    travelerDAO.update(travelerDB);
+                    em.getTransaction().commit();
+                    break;
+                case 4:
+                    System.out.println("Type in your new password: ");
+                    password = sc.nextLine();
+                    travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
+
+                    em.getTransaction().begin();
+                    travelerDAO.update(travelerDB);
+                    em.getTransaction().commit();
+                    break;
+                case 5:
+                    em.getTransaction().begin();
+                    travelerDAO.delete(travelerDB);
+                    em.getTransaction().commit();
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    exitWhile = true;
+                    break;
+                default:
+                    System.out.println("Type in a valid answer!");
+            }
         }
     }
 
