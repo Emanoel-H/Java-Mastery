@@ -78,7 +78,7 @@ public class TripDAO {
 
         List<Trip> trip = query.getResultList();
 
-        return trip.isEmpty() ? null : query.getSingleResult();
+        return trip.isEmpty() ? null : trip.getFirst();
     }
 
     public void updateTrip(Trip tripA){
