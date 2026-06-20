@@ -27,7 +27,6 @@ public class MainScreen {
         Traveler travelerDB;
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        em.getTransaction().begin();
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
             System.out.print("Email: ");
@@ -49,8 +48,7 @@ public class MainScreen {
                         emailFilled = false;
                         break;
                     case 2:
-                        signUp(sc, parser, travelerDAO);
-                        em.getTransaction().commit();
+                        signUp(sc, parser, travelerDAO, em);
                         emailFilled = false;
                         break;
                     case 3:
@@ -92,14 +90,13 @@ public class MainScreen {
                             travelerA = new Traveler();
                             travelerA.setEmail(emailA);
                             travelerDB = travelerDAO.searchPerson(travelerA);
-                            buyBusTickets(travelerDB);
+                            buyBusTickets(travelerDB, em);
                             break;
                         case 2:
-                            viewTickets(emailA);
+                            viewTickets(emailA, em);
                             break;
                         case 3:
-                            updateProfile(emailA, travelerDAO, sc, parser);
-                            em.getTransaction().commit();
+                            updateProfile(emailA, travelerDAO, sc, parser, em);
                             break;
                         case 4:
                             exitSystem = true;
@@ -115,7 +112,7 @@ public class MainScreen {
         em.close();
     }
 
-    private static void updateProfile(Email emailA, TravelerDAO travelerDAO, Scanner sc, DateTimeFormatter parser) {
+    private static void updateProfile(Email emailA, TravelerDAO travelerDAO, Scanner sc, DateTimeFormatter parser, EntityManager em) {
         String password;
         Traveler travelerA;
         Traveler travelerDB;
@@ -138,7 +135,10 @@ public class MainScreen {
                 System.out.println("Type in your name: ");
                 String name = sc.nextLine().replaceAll("\\d", "");
                 travelerDB.setName(Objects.requireNonNull(name, "Cannot be empty"));
+
+                em.getTransaction().begin();
                 travelerDAO.update(travelerDB);
+                em.getTransaction().commit();
                 break;
             case 2:
                 System.out.println("Type in your CPF: ");
@@ -151,23 +151,31 @@ public class MainScreen {
                 String dateFormatted = sc.nextLine();
                 LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
                 travelerDB.setBirthDate(birthDate);
+
+                em.getTransaction().begin();
                 travelerDAO.update(travelerDB);
+                em.getTransaction().commit();
                 break;
             case 4:
                 System.out.println("Type in your new password: ");
                 password = sc.nextLine();
                 travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
+
+                em.getTransaction().begin();
                 travelerDAO.update(travelerDB);
+                em.getTransaction().commit();
                 break;
             case 5:
+                em.getTransaction().begin();
                 travelerDAO.delete(travelerDB);
+                em.getTransaction().commit();
                 break;
             default:
                 System.out.println("Type in a valid answer!");
         }
     }
 
-    private static void signUp(Scanner sc, DateTimeFormatter parser, TravelerDAO travelerDAO) {
+    private static void signUp(Scanner sc, DateTimeFormatter parser, TravelerDAO travelerDAO, EntityManager em) {
         String password;
         String emailAddress;
         System.out.println("Type ur name:");
@@ -197,12 +205,12 @@ public class MainScreen {
         travelerA.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
         travelerA.setTelephone(telephone);
 
+        em.getTransaction().begin();
         travelerDAO.save(travelerA);
+        em.getTransaction().commit();
     }
 
-    private static void updateTicket() {
-        JPAUtils jpaUtils = new JPAUtils();
-        EntityManager em = jpaUtils.getEntityManager();
+    private static void updateTicket(EntityManager em) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         City cityA = new City();
         BusTicket busTicketSought;
@@ -210,7 +218,6 @@ public class MainScreen {
         BusTicket busTicketA = new BusTicket();
         Scanner sc = new Scanner(System.in);
         String cpf;
-        em.getTransaction().begin();
 
         System.out.print("""
                 Do you want to alter an info from your bus ticket?
@@ -224,7 +231,9 @@ public class MainScreen {
             System.out.println("Type in the code of the ticket you want to alter: ");
             String ticketCode = sc.nextLine();
             busTicketA.setCode(ticketCode);
+
             busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
+            System.out.println(busTicketSought);
 
             System.out.print("""
                     What do you want to alter on your ticket?
@@ -240,13 +249,19 @@ public class MainScreen {
                     System.out.println("Type in your name: ");
                     String name = sc.nextLine().replaceAll("\\d", "");
                     busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
+
+                    em.getTransaction().begin();
                     busTicketDao.update(busTicketSought);
+                    em.getTransaction().commit();
                     break;
                 case 2:
                     System.out.println("Type in your CPF: ");
                     cpf = sc.nextLine();
                     busTicketSought.getTraveler().setCpf(cpf);
+
+                    em.getTransaction().begin();
                     busTicketDao.update(busTicketSought);
+                    em.getTransaction().commit();
                     break;
                 case 3:
                     DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -254,24 +269,18 @@ public class MainScreen {
                     String dateFormatted = sc.nextLine();
                     LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
                     busTicketSought.getTraveler().setBirthDate(birthDate);
+
+                    em.getTransaction().begin();
                     busTicketDao.update(busTicketSought);
+                    em.getTransaction().commit();
                     break;
                 default:
                     System.out.println("Type in a valid number!");
             }
         }
-
-        em.getTransaction().commit();
-
-        busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
-        System.out.println(busTicketSought.toString());
-
-        em.close();
     }
 
-    private static void viewTickets(Email email) {
-        JPAUtils jpaUtils = new JPAUtils();
-        EntityManager em = jpaUtils.getEntityManager();
+    private static void viewTickets(Email email, EntityManager em) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         BusTicket busTicketA = new BusTicket();
         Traveler travelerA = new Traveler();
@@ -291,12 +300,9 @@ public class MainScreen {
         allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
 
         if (!allTickets.isEmpty()) {
-            updateTicket();
+            updateTicket(em);
             cancelTicket(busTicketA, busTicketDao, em);
         }
-
-        em.getTransaction().commit();
-        em.close();
     }
 
     private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em) {
@@ -330,10 +336,11 @@ public class MainScreen {
                             busTicketDB.setCanceled(true);
                             
                             busTicketDB.getTraveler().setCreditsBalance(busTicketDB.getTicketPrice());
-                            
-                            busTicketDao.update(busTicketDB);
 
+                            em.getTransaction().begin();
+                            busTicketDao.update(busTicketDB);
                             em.getTransaction().commit();
+
                             System.out.println("Ticket canceled, check your balance!");
                         }else
                             System.out.println("The canceling time is already over!");
@@ -347,7 +354,7 @@ public class MainScreen {
         }
     }
 
-    private static void buyBusTickets(Traveler traveler) {
+    private static void buyBusTickets(Traveler traveler, EntityManager em) {
         Scanner sc = new Scanner(System.in);
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
@@ -356,8 +363,6 @@ public class MainScreen {
         String name, cpf;
         LocalDate birthDate;
 
-        JPAUtils jpaUtils = new JPAUtils();
-        EntityManager em = jpaUtils.getEntityManager();
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         AddressDAO addressDAO = new AddressDAO(em);
         TripDAO tripDAO = new TripDAO(em);
@@ -366,8 +371,6 @@ public class MainScreen {
 
         System.out.println("---------------------------");
         System.out.println("      Bus Tickets App      ");
-
-        em.getTransaction().begin();
 
         while (endTickets != 1){
             boolean getBackCities = true;
@@ -460,6 +463,7 @@ public class MainScreen {
 
             busTicketList.add(busTicket);
 
+            em.getTransaction().begin();
             busTicketDao.save(busTicket);
             em.getTransaction().commit();
 
@@ -468,7 +472,6 @@ public class MainScreen {
             sc.nextLine();
         }
 
-        em.close();
         busTicketList.forEach(System.out::println);
     }
 }
