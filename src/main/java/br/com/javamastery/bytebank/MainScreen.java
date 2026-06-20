@@ -204,11 +204,8 @@ public class MainScreen {
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
-        AddressDAO addressDAO = new AddressDAO(em);
         City cityA = new City();
         BusTicket busTicketSought;
-        City cityDB;
-        List<City> allCities = addressDAO.searchCitiesByState("RJ");
         cityA.getState().setUf("RJ");
         BusTicket busTicketA = new BusTicket();
         Scanner sc = new Scanner(System.in);
