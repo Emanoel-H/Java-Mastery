@@ -122,6 +122,7 @@ public class MainScreen {
 
         boolean exitWhile = false;
         while (!exitWhile) {
+            System.out.println(travelerDB);
             System.out.print("""
                     What do you want to alter on your profile?
                     1 - Traveler's name
