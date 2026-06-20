@@ -60,15 +60,21 @@ public class BusTicketDAO {
     }
 
     public List<BusTicket> searchTickets(BusTicket busTicketA){
-        String jpql = "SELECT bt FROM BusTicket bt WHERE 1=1 ";
+        StringBuilder jpql = new StringBuilder("SELECT bt FROM BusTicket bt WHERE 1=1 ");
 
-        if (busTicketA.getTraveler().getCpf() != null)
-            jpql += "AND bt.traveler.cpf LIKE :cpf ";
+        Map<String, Object> params = new HashMap<>();
 
-        TypedQuery<BusTicket> query = this.em.createQuery(jpql, BusTicket.class);
+        if (busTicketA.getTraveler().getId() != null){
+            jpql.append("AND bt.buyerid LIKE :buyerId ");
+            params.put("buyerId", busTicketA.getTraveler().getId());
+        }
 
-        if (busTicketA.getTraveler().getCpf() != null)
-            query.setParameter("cpf", busTicketA.getTraveler().getCpf());
+        TypedQuery<BusTicket> query = this.em.createQuery(jpql.toString(), BusTicket.class);
+
+        if (params.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be informed.");
+
+        params.forEach(query::setParameter);
 
         return query.getResultList();
     }
