@@ -23,7 +23,7 @@ public class BusTicket {
     private Traveler traveler;
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal ticketPrice;
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id")
     private Trip trip;
     @Column(name = "code", length = 10, unique = true)
