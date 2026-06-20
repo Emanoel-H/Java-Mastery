@@ -34,6 +34,7 @@ public class BusTicket {
     private boolean canceled = false;
     private LocalDateTime editedAt;
     private LocalDate departureDate;
+    private Long buyerID;
 
     public BusTicket() {
         this.traveler = new Traveler();
