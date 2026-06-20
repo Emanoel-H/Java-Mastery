@@ -289,18 +289,23 @@ public class MainScreen {
 
         busTicketA.getTraveler().setId(travelerDAO.searchPerson(travelerA).getId());
         List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
-        String messageToDisplay = "Here is your ticket: ";
-
-        if (allTickets.size() > 1)
-            messageToDisplay = "Here are your tickets: ";
-
-        System.out.println(messageToDisplay);
-        allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
 
         if (!allTickets.isEmpty()) {
-            updateTicket(em);
-            cancelTicket(busTicketA, busTicketDao, em);
-        }
+            String messageToDisplay = "Here is your ticket: ";
+
+            if (allTickets.size() > 1)
+                messageToDisplay = "Here are your tickets: ";
+
+            System.out.println(messageToDisplay);
+            allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
+
+            if (!allTickets.isEmpty()) {
+                updateTicket(em);
+                cancelTicket(busTicketA, busTicketDao, em);
+            }
+        }else
+            System.out.println("There is no tickets in your database!");
+
     }
 
     private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em) {
