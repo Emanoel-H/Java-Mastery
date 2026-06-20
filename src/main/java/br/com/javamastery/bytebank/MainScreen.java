@@ -235,47 +235,54 @@ public class MainScreen {
             busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
             System.out.println(busTicketSought);
 
-            System.out.print("""
-                    What do you want to alter on your ticket?
-                    1- Traveler's name
-                    2- Traveler's CPF
-                    3- Traveler's birth date
-                    """);
-            choice = sc.nextInt();
-            sc.nextLine();
+            boolean exitWhile = false;
+            while (!exitWhile) {
+                System.out.print("""
+                        What do you want to alter on your ticket?
+                        1- Traveler's name
+                        2- Traveler's CPF
+                        3- Traveler's birth date
+                        4- Exit
+                        """);
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1:
+                        System.out.println("Type in your name: ");
+                        String name = sc.nextLine().replaceAll("\\d", "");
+                        busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
 
-            switch (choice){
-                case 1:
-                    System.out.println("Type in your name: ");
-                    String name = sc.nextLine().replaceAll("\\d", "");
-                    busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
+                        em.getTransaction().begin();
+                        busTicketDao.update(busTicketSought);
+                        em.getTransaction().commit();
+                        break;
+                    case 2:
+                        System.out.println("Type in your CPF: ");
+                        cpf = sc.nextLine();
+                        busTicketSought.getTraveler().setCpf(cpf);
 
-                    em.getTransaction().begin();
-                    busTicketDao.update(busTicketSought);
-                    em.getTransaction().commit();
-                    break;
-                case 2:
-                    System.out.println("Type in your CPF: ");
-                    cpf = sc.nextLine();
-                    busTicketSought.getTraveler().setCpf(cpf);
+                        em.getTransaction().begin();
+                        busTicketDao.update(busTicketSought);
+                        em.getTransaction().commit();
+                        break;
+                    case 3:
+                        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        System.out.println("Type in your birth date: ");
+                        String dateFormatted = sc.nextLine();
+                        LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
+                        busTicketSought.getTraveler().setBirthDate(birthDate);
 
-                    em.getTransaction().begin();
-                    busTicketDao.update(busTicketSought);
-                    em.getTransaction().commit();
-                    break;
-                case 3:
-                    DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    System.out.println("Type in your birth date: ");
-                    String dateFormatted = sc.nextLine();
-                    LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
-                    busTicketSought.getTraveler().setBirthDate(birthDate);
-
-                    em.getTransaction().begin();
-                    busTicketDao.update(busTicketSought);
-                    em.getTransaction().commit();
-                    break;
-                default:
-                    System.out.println("Type in a valid number!");
+                        em.getTransaction().begin();
+                        busTicketDao.update(busTicketSought);
+                        em.getTransaction().commit();
+                        break;
+                    case 4:
+                        System.out.println("Exiting...");
+                        exitWhile = true;
+                        break;
+                    default:
+                        System.out.println("Type in a valid number!");
+                }
             }
         }
     }
