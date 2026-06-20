@@ -69,6 +69,11 @@ public class BusTicketDAO {
             params.put("buyerId", busTicketA.getTraveler().getId());
         }
 
+        if (!busTicketA.isCanceled()){
+            jpql.append("AND bt.canceled = 0 ");
+            params.put("canceled", busTicketA.isCanceled());
+        }
+
         TypedQuery<BusTicket> query = this.em.createQuery(jpql.toString(), BusTicket.class);
 
         if (params.isEmpty())
