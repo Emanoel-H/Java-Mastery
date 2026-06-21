@@ -2,6 +2,7 @@ package br.com.javamastery.bytebank;
 
 import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
+import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
@@ -417,7 +418,7 @@ public class BusCompanyMainScreen {
                             BigDecimal tripPrice = sc.nextBigDecimal();
 
                             if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
-                                throw new RuntimeException("The Trip price must be a value higher than 0");
+                                throw new InvalidPriceException(tripPrice);
                             else {
                                 tripDB.setPrice(tripPrice);
 
