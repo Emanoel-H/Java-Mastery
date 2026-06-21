@@ -510,7 +510,7 @@ public class BusCompanyMainScreen {
                 sc.nextLine();
 
                 if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
-                    throw new RuntimeException("The Trip price must be a value higher than 0");
+                    throw new InvalidPriceException(tripPrice);
                 else {
                     trip.setPrice(tripPrice);
                     getBack = true;
