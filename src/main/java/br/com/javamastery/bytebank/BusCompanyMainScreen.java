@@ -465,7 +465,7 @@ public class BusCompanyMainScreen {
                     trip.setOriginCity(cityDB);
                 else{
                     cityName = "";
-                    throw new NullPointerException("Type in a valid value!");
+                    System.out.println("Type in a valid value!");
                 }
             }
         }
@@ -485,7 +485,7 @@ public class BusCompanyMainScreen {
                     trip.setDestinationCity(cityDB);
                 else {
                     cityName = "";
-                    throw new NullPointerException("Type in a valid value!");
+                    System.out.println("Type in a valid value!");
                 }
             }
         }
