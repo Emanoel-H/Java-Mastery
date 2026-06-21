@@ -4,6 +4,7 @@ import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.InvalidPriceException;
+import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
@@ -276,7 +277,7 @@ public class BusCompanyMainScreen {
                     Trip tripDB = tripDAO.searchSingleTrip(tripA);
 
                     if (tripDB == null)
-                        throw new IllegalArgumentException("Type in a valid code!");
+                        throw new TripNotFoundException(tripCode);
                     else {
                         em.getTransaction().begin();
                         tripDAO.delete(tripDB);
