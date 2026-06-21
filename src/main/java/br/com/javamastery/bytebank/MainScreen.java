@@ -1,6 +1,7 @@
 package br.com.javamastery.bytebank;
 
 import br.com.javamastery.dao.*;
+import br.com.javamastery.exception.CancellationDeadlineExceededException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
@@ -383,7 +384,7 @@ public class MainScreen {
 
                             System.out.println("Ticket canceled, check your balance!");
                         }else
-                            System.out.println("The canceling time is already over!");
+                            throw new CancellationDeadlineExceededException();
 
                         getBack = false;
                     }
