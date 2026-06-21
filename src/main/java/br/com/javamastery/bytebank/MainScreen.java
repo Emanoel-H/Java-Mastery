@@ -265,7 +265,7 @@ public class MainScreen {
             while (getBack) {
                 System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
                 String ticketCode = sc.nextLine();
-                if ((ticketCode.charAt(0) != 'C' || ticketCode.charAt(0) != 'c') && ticketCode.trim().length() != 1) {
+                if (!ticketCode.equalsIgnoreCase("C")) {
                     busTicketA.setCode(ticketCode);
 
                     busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
