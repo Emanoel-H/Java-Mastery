@@ -2,6 +2,7 @@ package br.com.javamastery.bytebank;
 
 import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
+import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
@@ -606,6 +607,7 @@ public class BusCompanyMainScreen {
     private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em) {
         String password;
         String emailAddress;
+        EmailDAO emailDAO = new EmailDAO(em);
         System.out.println("Type your Legal Name:");
         String legalName = sc.nextLine();
 
@@ -620,6 +622,11 @@ public class BusCompanyMainScreen {
 
         System.out.print("Email: ");
         emailAddress = sc.nextLine();
+        Email emailA = new Email();
+        emailA.setEmail(emailAddress);
+
+        if (emailDAO.emailExists(emailA))
+            throw new EmailAlreadyExistsException(emailA.getEmail());
 
         System.out.print("\nPassword: ");
         password = sc.nextLine();
