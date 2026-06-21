@@ -377,13 +377,13 @@ public class MainScreen {
             boolean getBack = true;
             while (getBack) {
                 System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
-                String tripCode = sc.nextLine();
-                if (!tripCode.equalsIgnoreCase("C")) {
-                    busTicketA.setCode(tripCode);
+                String ticketCode = sc.nextLine();
+                if ((ticketCode.charAt(0) != 'C' || ticketCode.charAt(0) != 'c') && ticketCode.trim().length() != 1) {
+                    busTicketA.setCode(ticketCode);
                     BusTicket busTicketDB = busTicketDao.searchSingleTicket(busTicketA);
 
                     if (busTicketDB == null)
-                        throw new TicketNotFoundException(tripCode);
+                        throw new TicketNotFoundException(ticketCode);
                     else {
                         LocalDateTime tripDateTime = LocalDateTime.of(busTicketDB.getDepartureDate(),
                                 busTicketDB.getTrip().getDepartureTime());
