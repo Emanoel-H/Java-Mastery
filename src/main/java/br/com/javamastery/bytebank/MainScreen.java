@@ -261,61 +261,71 @@ public class MainScreen {
         sc.nextLine();
 
         if (choice == 1) {
-            System.out.println("Type in the code of the ticket you want to alter: ");
-            String ticketCode = sc.nextLine();
-            busTicketA.setCode(ticketCode);
+            boolean getBack = true;
+            while (getBack) {
+                System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
+                String ticketCode = sc.nextLine();
+                if ((ticketCode.charAt(0) != 'C' || ticketCode.charAt(0) != 'c') && ticketCode.trim().length() != 1) {
+                    busTicketA.setCode(ticketCode);
 
-            busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
-            System.out.println(busTicketSought);
+                    busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
+                    System.out.println(busTicketSought);
 
-            boolean exitWhile = false;
-            while (!exitWhile) {
-                System.out.print("""
-                        What do you want to alter on your ticket?
-                        1- Traveler's name
-                        2- Traveler's CPF
-                        3- Traveler's birth date
-                        4- Exit
-                        """);
-                choice = sc.nextInt();
-                sc.nextLine();
-                switch (choice) {
-                    case 1:
-                        System.out.println("Type in your name: ");
-                        String name = sc.nextLine().replaceAll("\\d", "");
-                        busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
+                    if (busTicketSought == null)
+                        throw new TicketNotFoundException(ticketCode);
+                    else {
+                        boolean exitWhile = false;
+                        while (!exitWhile) {
+                            System.out.print("""
+                                    What do you want to alter on your ticket?
+                                    1- Traveler's name
+                                    2- Traveler's CPF
+                                    3- Traveler's birth date
+                                    4- Exit
+                                    """);
+                            choice = sc.nextInt();
+                            sc.nextLine();
+                            switch (choice) {
+                                case 1:
+                                    System.out.println("Type in your name: ");
+                                    String name = sc.nextLine().replaceAll("\\d", "");
+                                    busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
 
-                        em.getTransaction().begin();
-                        busTicketDao.update(busTicketSought);
-                        em.getTransaction().commit();
-                        break;
-                    case 2:
-                        System.out.println("Type in your CPF: ");
-                        cpf = sc.nextLine();
-                        busTicketSought.getTraveler().setCpf(cpf);
+                                    em.getTransaction().begin();
+                                    busTicketDao.update(busTicketSought);
+                                    em.getTransaction().commit();
+                                    break;
+                                case 2:
+                                    System.out.println("Type in your CPF: ");
+                                    cpf = sc.nextLine();
+                                    busTicketSought.getTraveler().setCpf(cpf);
 
-                        em.getTransaction().begin();
-                        busTicketDao.update(busTicketSought);
-                        em.getTransaction().commit();
-                        break;
-                    case 3:
-                        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        System.out.println("Type in your birth date: ");
-                        String dateFormatted = sc.nextLine();
-                        LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
-                        busTicketSought.getTraveler().setBirthDate(birthDate);
+                                    em.getTransaction().begin();
+                                    busTicketDao.update(busTicketSought);
+                                    em.getTransaction().commit();
+                                    break;
+                                case 3:
+                                    DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    System.out.println("Type in your birth date: ");
+                                    String dateFormatted = sc.nextLine();
+                                    LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
+                                    busTicketSought.getTraveler().setBirthDate(birthDate);
 
-                        em.getTransaction().begin();
-                        busTicketDao.update(busTicketSought);
-                        em.getTransaction().commit();
-                        break;
-                    case 4:
-                        System.out.println("Exiting...");
-                        exitWhile = true;
-                        break;
-                    default:
-                        System.out.println("Type in a valid number!");
-                }
+                                    em.getTransaction().begin();
+                                    busTicketDao.update(busTicketSought);
+                                    em.getTransaction().commit();
+                                    break;
+                                case 4:
+                                    System.out.println("Exiting...");
+                                    exitWhile = true;
+                                    break;
+                                default:
+                                    System.out.println("Type in a valid number!");
+                            }
+                        }
+                    }
+                }else
+                    getBack = false;
             }
         }
     }
