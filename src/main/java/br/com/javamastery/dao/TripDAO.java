@@ -1,5 +1,6 @@
 package br.com.javamastery.dao;
 
+import br.com.javamastery.exception.TripAlreadySoldException;
 import br.com.javamastery.models.BusTicket;
 import br.com.javamastery.models.Trip;
 
@@ -87,7 +88,7 @@ public class TripDAO {
 
     public void delete(Trip tripA){
         if (isTripActive(tripA))
-            throw new RuntimeException("You can't delete a trip that is already related to a sale");
+            throw new TripAlreadySoldException("You can't delete a trip that is already related to a sale");
 
         tripA = em.merge(tripA);
         this.em.remove(tripA);
