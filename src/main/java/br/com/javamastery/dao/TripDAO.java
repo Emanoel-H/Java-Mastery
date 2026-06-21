@@ -88,7 +88,7 @@ public class TripDAO {
 
     public void delete(Trip tripA){
         if (isTripActive(tripA))
-            throw new TripAlreadySoldException("You can't delete a trip that is already related to a sale");
+            throw new TripAlreadySoldException(tripA.getCode());
 
         tripA = em.merge(tripA);
         this.em.remove(tripA);
