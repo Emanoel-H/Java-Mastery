@@ -3,6 +3,7 @@ package br.com.javamastery.bytebank;
 import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.CancellationDeadlineExceededException;
 import br.com.javamastery.exception.EmailAlreadyExistsException;
+import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
@@ -372,7 +373,7 @@ public class MainScreen {
                     BusTicket busTicketDB = busTicketDao.searchSingleTicket(busTicketA);
 
                     if (busTicketDB == null)
-                        throw new IllegalArgumentException("Type in a valid code!");
+                        throw new TicketNotFoundException(tripCode);
                     else {
                         LocalDateTime tripDateTime = LocalDateTime.of(busTicketDB.getDepartureDate(),
                                 busTicketDB.getTrip().getDepartureTime());
