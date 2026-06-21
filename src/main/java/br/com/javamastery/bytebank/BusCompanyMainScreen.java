@@ -272,7 +272,7 @@ public class BusCompanyMainScreen {
             while (getBack) {
                 System.out.println("Type in the code of the trip you want to alter: \n(Type 'C' to cancel) ");
                 String tripCode = sc.nextLine();
-                if ((tripCode.charAt(0) != 'C' || tripCode.charAt(0) != 'c') && tripCode.trim().length() != 1) {
+                if (!tripCode.equalsIgnoreCase("C")) {
                     tripA.setCode(tripCode);
                     Trip tripDB = tripDAO.searchSingleTrip(tripA);
 
