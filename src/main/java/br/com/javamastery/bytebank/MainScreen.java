@@ -2,6 +2,7 @@ package br.com.javamastery.bytebank;
 
 import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.CancellationDeadlineExceededException;
+import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.util.JPAUtils;
 
@@ -203,6 +204,7 @@ public class MainScreen {
     private static void signUp(Scanner sc, DateTimeFormatter parser, TravelerDAO travelerDAO, EntityManager em) {
         String password;
         String emailAddress;
+        EmailDAO emailDAO = new EmailDAO(em);
         System.out.println("Type ur name:");
         String name = sc.nextLine().replaceAll("\\d", "");
 
@@ -215,6 +217,11 @@ public class MainScreen {
 
         System.out.print("Email: ");
         emailAddress = sc.nextLine();
+        Email emailA = new Email();
+        emailA.setEmail(emailAddress);
+
+        if (emailDAO.emailExists(emailA))
+            throw new EmailAlreadyExistsException(emailA.getEmail());
 
         System.out.print("\nPassword: ");
         password = sc.nextLine();
