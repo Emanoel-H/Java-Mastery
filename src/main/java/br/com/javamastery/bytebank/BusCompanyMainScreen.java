@@ -8,6 +8,7 @@ import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.service.AuthService;
+import br.com.javamastery.service.TripService;
 import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
@@ -31,6 +32,7 @@ public class BusCompanyMainScreen {
         BusCompany busCompanyA;
         BusCompany busCompanyDB;
         AuthService authService = new AuthService(em);
+        TripService tripService = new TripService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
@@ -90,7 +92,7 @@ public class BusCompanyMainScreen {
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
-                            createTrip(em, sc, busCompanyDB);
+                            createTrip(em, sc, busCompanyDB, tripService);
                             break;
                         case 2:
                             busCompanyA = new BusCompany();
@@ -438,7 +440,7 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void createTrip(EntityManager em, Scanner sc, BusCompany busCompanyDB) {
+    private static void createTrip(EntityManager em, Scanner sc, BusCompany busCompanyDB, TripService tripService) {
         Trip trip = new Trip();
         AddressDAO addressDAO = new AddressDAO(em);
         TripDAO tripDAO = new TripDAO(em);
@@ -489,8 +491,7 @@ public class BusCompanyMainScreen {
             }
         }
 
-        trip.calculateRealDistance(osrmClient);
-        double suggestedPrice = trip.getDistanceKM() * 0.35;
+        double suggestedPrice = tripService.suggestPrice(trip.getOriginCity(), trip.getDestinationCity())
 
         System.out.printf("""
                 Suggested price based on distance in KM: R$ %.2f
