@@ -6,6 +6,8 @@ import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.models.Email;
 import jakarta.persistence.EntityManager;
 
+import java.util.Objects;
+
 public class AuthService {
     private EmailDAO emailDAO;
 
@@ -34,7 +36,7 @@ public class AuthService {
 
     public boolean emailExists(String email) {
         Email emailA = new Email();
-        emailA.setEmail(email);
+        emailA.setEmail(Objects.requireNonNull(email, "Email address cannot be null."));
         return emailDAO.emailExists(emailA);
     }
 
