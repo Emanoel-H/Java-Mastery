@@ -3,6 +3,7 @@ package br.com.javamastery.bytebank;
 import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.EmailAlreadyExistsException;
+import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
@@ -22,23 +23,21 @@ public class BusCompanyMainScreen {
         Scanner sc = new Scanner(System.in);
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
-        EmailDAO emailDAO = new EmailDAO(em);
         BusCompanyDAO busCompanyDAO = new BusCompanyDAO(em);
         boolean exitSystem = false;
-        boolean emailFilled = false;
         boolean accessGranted = false;
         String emailAddress, password;
         Email emailA = new Email();
         BusCompany busCompanyA;
         BusCompany busCompanyDB;
+        AuthService authService = new AuthService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
             System.out.print("Email: ");
             emailAddress = sc.nextLine();
-            emailA.setEmail(emailAddress);
 
-            if (!emailDAO.emailExists(emailA)) {
+            if (!authService.emailExists(emailAddress)) {
                 System.out.print("""
                         \nIncorrect email!
                         1 - Insert a new email address.
@@ -50,11 +49,9 @@ public class BusCompanyMainScreen {
 
                 switch (emailChoice) {
                     case 1:
-                        emailFilled = false;
                         break;
                     case 2:
                         signUp(sc, busCompanyDAO, em);
-                        emailFilled = false;
                         break;
                     case 3:
                         exitSystem = true;
@@ -63,19 +60,17 @@ public class BusCompanyMainScreen {
                         System.out.println("Type in a valid answer!");
                         exitSystem = true;
                 }
-            }else
-                emailFilled = true;
+                continue;
+            }
 
-            if (emailFilled){
-                System.out.print("\nPassword: ");
-                password = sc.nextLine();
-                emailA.setPassword(password);
+            System.out.print("\nPassword: ");
+            password = sc.nextLine();
 
-                if (!emailDAO.emailExists(emailA)){
-                    System.out.println("Invalid password!");
-                    emailFilled = false;
-                }else
-                    accessGranted = true;
+            try{
+                emailA = authService.login(emailAddress, password);
+                accessGranted = true;
+            }catch(InvalidCredentialsException e){
+                System.out.println("Invalid password!");
             }
 
             if (accessGranted){
