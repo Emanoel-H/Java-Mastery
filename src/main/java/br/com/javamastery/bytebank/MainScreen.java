@@ -5,6 +5,7 @@ import br.com.javamastery.exception.CancellationDeadlineExceededException;
 import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
+import br.com.javamastery.service.AuthService;
 import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
@@ -205,7 +206,7 @@ public class MainScreen {
     private static void signUp(Scanner sc, DateTimeFormatter parser, TravelerDAO travelerDAO, EntityManager em) {
         String password;
         String emailAddress;
-        EmailDAO emailDAO = new EmailDAO(em);
+        AuthService authService = new AuthService(em);
         System.out.println("Type ur name:");
         String name = sc.nextLine().replaceAll("\\d", "");
 
