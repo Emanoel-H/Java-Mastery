@@ -17,7 +17,7 @@ public class AuthService {
 
     public Email login(String email, String password) {
         Email emailA = new Email();
-        emailA.setEmail(Objects.requireNonNull(email, "Email address cannot be null."));
+        emailA.setEmail(email);
         emailA.setPassword(Objects.requireNonNull(password, "Password cannot be null."));
 
         if (!emailDAO.emailExists(emailA))
