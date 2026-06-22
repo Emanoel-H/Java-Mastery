@@ -32,4 +32,10 @@ public class AuthService {
             throw new EmailAlreadyExistsException(email);
     }
 
+    public boolean emailExists(String email) {
+        Email emailA = new Email();
+        emailA.setEmail(email);
+        return emailDAO.emailExists(emailA);
+    }
+
 }
