@@ -6,6 +6,7 @@ import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
+import br.com.javamastery.service.AuthService;
 import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
@@ -608,7 +609,7 @@ public class BusCompanyMainScreen {
     private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em) {
         String password;
         String emailAddress;
-        EmailDAO emailDAO = new EmailDAO(em);
+        AuthService authService = new AuthService(em);
         System.out.println("Type your Legal Name:");
         String legalName = sc.nextLine();
 
