@@ -248,7 +248,7 @@ public class BusCompanyMainScreen {
             allTrips.forEach(t2 -> System.out.println(t2.toString()));
 
             if (!allTrips.isEmpty()) {
-                editTrip(em, tripA, tripDAO);
+                editTrip(em, tripA, tripDAO, tripService);
                 deleteTrip(em, tripA, tripDAO);
             }
         }else
@@ -289,7 +289,7 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void editTrip(EntityManager em, Trip tripA, TripDAO tripDAO) {
+    private static void editTrip(EntityManager em, Trip tripA, TripDAO tripDAO, TripService tripService) {
         boolean getBack;
         String cityName, stateName = "";
         AddressDAO addressDAO = new AddressDAO(em);
@@ -353,8 +353,7 @@ public class BusCompanyMainScreen {
                             }
                         }
 
-                        tripDB.calculateRealDistance(osrmClient);
-                        tripDB.setPrice(BigDecimal.valueOf(tripDB.getDistanceKM() * 0.35));
+                        tripDB.setPrice(BigDecimal.valueOf(tripService.suggestPrice(tripDB.getOriginCity(), tripDB.getDestinationCity())));
 
                         if (tripDB.getOriginCity() != null) {
                             em.getTransaction().begin();
@@ -383,8 +382,8 @@ public class BusCompanyMainScreen {
                             }
                         }
 
-                        tripDB.calculateRealDistance(osrmClient);
-                        tripDB.setPrice(BigDecimal.valueOf(tripDB.getDistanceKM() * 0.35));
+                        tripDB.setPrice(BigDecimal.valueOf(tripService.suggestPrice(tripDB.getOriginCity(), tripDB.getDestinationCity())));
+
 
                         if (tripDB.getDestinationCity() != null) {
                             em.getTransaction().begin();
