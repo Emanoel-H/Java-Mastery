@@ -491,7 +491,7 @@ public class BusCompanyMainScreen {
             }
         }
 
-        double suggestedPrice = tripService.suggestPrice(trip.getOriginCity(), trip.getDestinationCity())
+        double suggestedPrice = tripService.suggestPrice(trip.getOriginCity(), trip.getDestinationCity());
 
         System.out.printf("""
                 Suggested price based on distance in KM: R$ %.2f
