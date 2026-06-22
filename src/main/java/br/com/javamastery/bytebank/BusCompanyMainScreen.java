@@ -624,11 +624,7 @@ public class BusCompanyMainScreen {
 
         System.out.print("Email: ");
         emailAddress = sc.nextLine();
-        Email emailA = new Email();
-        emailA.setEmail(emailAddress);
-
-        if (emailDAO.emailExists(emailA))
-            throw new EmailAlreadyExistsException(emailA.getEmail());
+        authService.checkEmailAvailable(emailAddress);
 
         System.out.print("\nPassword: ");
         password = sc.nextLine();
