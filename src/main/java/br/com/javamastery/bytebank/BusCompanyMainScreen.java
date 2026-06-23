@@ -714,7 +714,26 @@ public class BusCompanyMainScreen {
             }
         }else
             tripPrice =BigDecimal.valueOf(suggested);
-        
+
         return tripPrice;
+    }
+
+    public static LocalTime askDepartureTime(Scanner sc){
+        LocalTime departureTime = LocalTime.now();
+
+        boolean getBack = false;
+        while (!getBack) {
+            System.out.println("When will be the departure time? (Use 24-hour format, example: 14:30)");
+            String departureTimeString = sc.nextLine();
+
+            try {
+                departureTime = LocalTime.parse(departureTimeString);
+                getBack = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid format! Please enter the time precisely as HH:mm.");
+            }
+        }
+        return departureTime;
+
     }
 }
