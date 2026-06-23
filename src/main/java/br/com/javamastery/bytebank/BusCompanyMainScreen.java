@@ -585,7 +585,7 @@ public class BusCompanyMainScreen {
         City cityA = new City();
 
         while (cityName.isEmpty()) {
-            System.out.println("Type in the name of the origin city: \nIf you wish to view the cities before type 1");
+            System.out.println("Type in the name of the destination city: \nIf you wish to view the cities before type 1");
             cityName = sc.nextLine();
 
             if (cityName.trim().charAt(0) == '1')
