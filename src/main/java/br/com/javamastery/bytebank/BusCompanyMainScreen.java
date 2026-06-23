@@ -661,4 +661,30 @@ public class BusCompanyMainScreen {
 
         return originCity;
     }
+
+    private static City collectDestinationCity(AddressDAO addressDAO, Scanner sc){
+        String cityName = "";
+        String stateName = "";
+        City destinationCity = null;
+        City cityA = new City();
+
+        while (cityName.isEmpty()) {
+            System.out.println("Type in the name of the origin city: \nIf you wish to view the cities before type 1");
+            cityName = sc.nextLine();
+
+            if (cityName.trim().charAt(0) == '1')
+                destinationCity = viewCities(stateName, addressDAO, sc, cityName);
+            else {
+                cityA.setCity(cityName.toLowerCase());
+                destinationCity = addressDAO.searchCity(cityA);
+
+                if (destinationCity == null){
+                    cityName = "";
+                    System.out.println("Type in a valid value!");
+                }
+            }
+        }
+
+        return destinationCity;
+    }
 }
