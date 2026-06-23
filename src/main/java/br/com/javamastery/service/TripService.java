@@ -48,6 +48,7 @@ public class TripService {
             this.em.getTransaction().commit();
         } catch (Exception e) {
             this.em.getTransaction().rollback();
+            throw e;
         }
             return trip;
     }
