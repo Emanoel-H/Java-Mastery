@@ -24,13 +24,8 @@ public class TripService {
     }
 
     public double suggestPrice(City origin, City  destination) {
-        Trip trip = new Trip();
-        trip.setOriginCity(origin);
-        trip.setDestinationCity(destination);
-
-        trip.calculateRealDistance(osrmClient);
-
-        return trip.getDistanceKM() * PRICE_PER_KM;
+        double distanceKM = osrmClient.getRealDistanceKM(origin, destination);
+        return distanceKM * PRICE_PER_KM;
     }
 
     public Trip createTrip(City origin, City destination, BigDecimal price, LocalTime departureTime, BusCompany busCompany) {
