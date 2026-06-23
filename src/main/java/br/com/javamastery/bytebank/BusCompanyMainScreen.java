@@ -440,102 +440,18 @@ public class BusCompanyMainScreen {
     }
 
     private static void createTrip(EntityManager em, Scanner sc, BusCompany busCompanyDB, TripService tripService) {
-        Trip trip = new Trip();
         AddressDAO addressDAO = new AddressDAO(em);
-        TripDAO tripDAO = new TripDAO(em);
-        String cityName, stateName = "";
-        BigDecimal tripPrice;
-        City cityA = new City();
-        City cityDB;
-        boolean getBack;
-        OsrmClient osrmClient = new OsrmClient();
 
-        cityName = "";
-        while (cityName.isEmpty()) {
-            System.out.println("Type in the name of the origin city: \nIf you wish to view the cities before type 1");
-            cityName = sc.nextLine();
+        City origin = collectOriginCity(addressDAO, sc);
+        City destination = collectDestinationCity(addressDAO, sc);
+        double suggestedPrice = tripService.suggestPrice(origin, destination);
+        BigDecimal price = askPriceOrAcceptSuggestion(sc, suggestedPrice);
+        LocalTime departureTime = askDepartureTime(sc);
 
-            if (cityName.trim().charAt(0) == '1')
-                trip.setOriginCity(viewCities(stateName, addressDAO, sc, cityName));
-            else {
-                cityA.setCity(cityName.toLowerCase());
-                cityDB = addressDAO.searchCity(cityA);
+        Trip trip = tripService.createTrip(origin, destination, price, departureTime, busCompanyDB);
 
-                if (cityDB != null)
-                    trip.setOriginCity(cityDB);
-                else{
-                    cityName = "";
-                    System.out.println("Type in a valid value!");
-                }
-            }
-        }
-
-        cityName = "";
-        while (cityName.isEmpty()) {
-            System.out.println("Type in the name of the destination city: \nIf you wish to view the cities before type 1");
-            cityName = sc.nextLine();
-
-            if (cityName.trim().charAt(0) == '1')
-                trip.setDestinationCity(viewCities(stateName, addressDAO, sc, cityName));
-            else {
-                cityA.setCity(cityName.toLowerCase());
-                cityDB = addressDAO.searchCity(cityA);
-
-                if (cityDB != null)
-                    trip.setDestinationCity(cityDB);
-                else {
-                    cityName = "";
-                    System.out.println("Type in a valid value!");
-                }
-            }
-        }
-
-        double suggestedPrice = tripService.suggestPrice(trip.getOriginCity(), trip.getDestinationCity());
-
-        System.out.printf("""
-                Suggested price based on distance in KM: R$ %.2f
-                Do you wish to keep this price?
-                0 - No
-                1 - Yes
-                """, suggestedPrice);
-        int priceChoice = sc.nextInt();
-
-        if (priceChoice == 0){
-            getBack = false;
-            while (!getBack) {
-                System.out.println("Type in the price of the trip: ");
-                tripPrice = sc.nextBigDecimal();
-                sc.nextLine();
-
-                if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
-                    throw new InvalidPriceException(tripPrice);
-                else {
-                    trip.setPrice(tripPrice);
-                    getBack = true;
-                }
-            }
-        }else
-            trip.setPrice(BigDecimal.valueOf(suggestedPrice));
-
-        getBack = false;
-        while (!getBack) {
-            System.out.println("When will be the departure time? (Use 24-hour format, example: 14:30)");
-            String departureTimeString = sc.nextLine();
-
-            try {
-                LocalTime departureTime = LocalTime.parse(departureTimeString);
-                trip.setDepartureTime(departureTime);
-                getBack = true;
-            } catch (DateTimeParseException e) {
-                System.out.println("Invalid format! Please enter the time precisely as HH:mm.");
-            }
-        }
-
-        trip.setBusCompany(busCompanyDB);
-
-        em.getTransaction().begin();
-        tripDAO.save(trip);
-        em.getTransaction().commit();
+        System.out.println("Trip successfully created!");
+        System.out.println(trip);
     }
 
     private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
