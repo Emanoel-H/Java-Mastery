@@ -687,4 +687,34 @@ public class BusCompanyMainScreen {
 
         return destinationCity;
     }
+
+    public static BigDecimal askPriceOrAcceptSuggestion(Scanner sc, double suggested){
+        BigDecimal tripPrice = BigDecimal.ZERO;
+
+        System.out.printf("""
+                Suggested price based on distance in KM: R$ %.2f
+                Do you wish to keep this price?
+                0 - No
+                1 - Yes
+                """, suggested);
+        int priceChoice = sc.nextInt();
+
+        if (priceChoice == 0){
+            boolean getBack = false;
+            while (!getBack) {
+                System.out.println("Type in the price of the trip: ");
+                tripPrice = sc.nextBigDecimal();
+                sc.nextLine();
+
+                if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
+                    throw new InvalidPriceException(tripPrice);
+                else {
+                    getBack = true;
+                }
+            }
+        }else
+            tripPrice =BigDecimal.valueOf(suggested);
+        
+        return tripPrice;
+    }
 }
