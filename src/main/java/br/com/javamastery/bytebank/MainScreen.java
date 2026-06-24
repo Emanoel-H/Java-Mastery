@@ -552,5 +552,66 @@ public class MainScreen {
         return originCity;
     }
 
-    
+    private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
+        City cityDB = null;
+        cityName = "";
+        while (stateName.isEmpty()) {
+            System.out.println("From which state do you want to search the cities?");
+            List<State> allStates = addressDAO.searchAllState();
+            allStates.forEach(s -> System.out.println(s.toString()));
+            stateName = sc.nextLine();
+
+            if (stateName.trim().length() > 2) {
+                String finalStateName = stateName;
+                if (allStates.stream().noneMatch(s -> s.getName().trim().equalsIgnoreCase(finalStateName.trim()))) {
+                    stateName = "";
+                    System.out.println("Type in a valid value!");
+                }else {
+                    stateName = allStates
+                            .stream()
+                            .map(State::getName)
+                            .filter(s -> s.trim().equalsIgnoreCase(finalStateName.trim()))
+                            .findFirst()
+                            .orElse(null);
+                }
+            }else {
+                String finalStateUF = stateName;
+                if (allStates.stream().noneMatch(s -> s.getUf().equals(finalStateUF))){
+                    stateName = "";
+                    System.out.println("Type in a valid value!");
+                }else {
+                    stateName = allStates
+                            .stream()
+                            .map(State::getName)
+                            .filter(s -> s.trim().equalsIgnoreCase(finalStateUF.trim()))
+                            .findFirst()
+                            .orElse(null);
+                }
+            }
+        }
+
+        if (!stateName.isEmpty()) {
+            while (cityName.isEmpty()) {
+                List<City> citiesByState = addressDAO.searchCitiesByState(stateName);
+                System.out.printf("Cities from the state %s\n", stateName);
+                citiesByState.forEach(c -> System.out.println(c.toString()));
+                System.out.println("Type in your selected city:");
+                cityName = sc.nextLine();
+
+                if (!cityName.isEmpty()) {
+                    String finalCityName = cityName;
+                    if (citiesByState.stream().noneMatch(c -> c.getCity().trim().equalsIgnoreCase(finalCityName.trim())))
+                        cityName = "";
+                }
+            }
+
+            if (!cityName.isEmpty()){
+                City cityA = new City();
+                cityA.setCity(cityName);
+                cityDB = addressDAO.searchCity(cityA);
+            }
+        }
+
+        return cityDB;
+    }
 }
