@@ -7,6 +7,7 @@ import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.service.AuthService;
 import br.com.javamastery.service.TicketService;
+import br.com.javamastery.service.TripService;
 import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
@@ -31,6 +32,7 @@ public class MainScreen {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         AuthService authService = new AuthService(em);
         TicketService ticketService =  new TicketService(em);
+        TripService tripService = new TripService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
@@ -90,7 +92,7 @@ public class MainScreen {
                             travelerA = new Traveler();
                             travelerA.setEmail(emailA);
                             travelerDB = travelerDAO.searchPerson(travelerA);
-                            buyBusTickets(travelerDB, em, ticketService);
+                            buyBusTickets(travelerDB, em, ticketService, tripService);
                             break;
                         case 2:
                             viewTickets(emailA, em);
@@ -405,7 +407,7 @@ public class MainScreen {
         }
     }
 
-    private static void buyBusTickets(Traveler traveler, EntityManager em, TicketService ticketService) {
+    private static void buyBusTickets(Traveler traveler, EntityManager em, TicketService ticketService, TripService tripService) {
         Scanner sc = new Scanner(System.in);
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
@@ -434,7 +436,7 @@ public class MainScreen {
                 City destination = collectDestinationCity(sc, addressDAO);
                 tripA.setDestinationCity(destination);
 
-                List<Trip> availableTrips = tripDAO.searchTrips(tripA);
+                List<Trip> availableTrips = tripService.searchTrips(tripA);
 
                 if (!availableTrips.isEmpty()) {
                     boolean getBackTrips = true;
