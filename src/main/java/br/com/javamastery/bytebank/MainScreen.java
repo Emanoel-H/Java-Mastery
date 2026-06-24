@@ -446,22 +446,7 @@ public class MainScreen {
                     throw new RuntimeException("There are no trips matching these cities you selected! Try again!");
             }
 
-            boolean getBackDeparture = true;
-            while (getBackDeparture) {
-                try {
-                    System.out.println("Type in the date of when you are willing to travel: (pattern: dd/MM/yyyy)");
-                    String departureDay = sc.nextLine();
-                    LocalDate departureDate = LocalDate.parse(departureDay, parser);
-
-                    if (!departureDate.isBefore(LocalDate.now())) {
-                        getBackDeparture = false;
-                        busTicket.setDepartureDate(departureDate);
-                    } else
-                        System.out.println("Invalid departure date! You can't travel to past! Try again!");
-                }catch (DateTimeParseException e) {
-                    System.out.println("Invalid departure date! Try again!");
-                }
-            }
+            LocalDate departureDate = collectDepartureDate(sc, parser);
 
             System.out.println("""
                     Are you the one who is travelling?
