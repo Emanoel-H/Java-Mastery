@@ -95,7 +95,7 @@ public class MainScreen {
                             buyBusTickets(travelerDB, em, ticketService, tripService);
                             break;
                         case 2:
-                            viewTickets(emailA, em);
+                            viewTickets(emailA, em, ticketService);
                             break;
                         case 3:
                             updateProfile(emailA, travelerDAO, sc, parser, em, exitSystem);
@@ -324,7 +324,7 @@ public class MainScreen {
         }
     }
 
-    private static void viewTickets(Email email, EntityManager em) {
+    private static void viewTickets(Email email, EntityManager em, TicketService  ticketService) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         BusTicket busTicketA = new BusTicket();
         Traveler travelerA = new Traveler();
@@ -351,14 +351,14 @@ public class MainScreen {
 
             if (!allTickets.isEmpty()) {
                 updateTicket(em);
-                cancelTicket(busTicketA, busTicketDao, em);
+                cancelTicket(busTicketA, busTicketDao, em, ticketService);
             }
         }else
             System.out.println("There is no tickets in your database!");
 
     }
 
-    private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em) {
+    private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em, TicketService  ticketService) {
         Scanner sc = new Scanner(System.in);
         System.out.println("""
                 Do you wish to cancel a trip?
@@ -373,36 +373,10 @@ public class MainScreen {
                 System.out.println("Type in the code of the ticket you want to alter: \n(Type 'C' to cancel) ");
                 String ticketCode = sc.nextLine();
                 if (!ticketCode.equalsIgnoreCase("C")) {
-                    busTicketA.setCode(ticketCode);
-                    BusTicket busTicketDB = busTicketDao.searchSingleTicket(busTicketA);
-
-                    if (busTicketDB == null)
-                        throw new TicketNotFoundException(ticketCode);
-                    else {
-                        LocalDateTime tripDateTime = LocalDateTime.of(busTicketDB.getDepartureDate(),
-                                busTicketDB.getTrip().getDepartureTime());
-
-                        LocalDateTime now = LocalDateTime.now();
-
-                        if (now.isBefore(tripDateTime.minusHours(1))){
-                            busTicketDB.setCancelDate(now);
-                            busTicketDB.setCanceled(true);
-                            
-                            busTicketDB.getTraveler().setCreditsBalance(busTicketDB.getTicketPrice());
-
-                            em.getTransaction().begin();
-                            busTicketDao.update(busTicketDB);
-                            em.getTransaction().commit();
-
-                            System.out.println("Ticket canceled, check your balance!");
-                        }else
-                            throw new CancellationDeadlineExceededException();
-
-                        getBack = false;
-                    }
-                }else
-                    getBack = false;
-
+                    ticketService.cancelTicket(ticketCode);
+                    System.out.println("Ticket canceled, check your balance!");
+                }
+                getBack = false;
             }
         }
     }
