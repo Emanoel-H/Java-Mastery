@@ -417,9 +417,7 @@ public class MainScreen {
 
             Traveler travelerA = collectTraveler(sc, traveler, parser);
 
-            ticketService.buyTicket(trip, departureDate, travelerA);
-
-            busTicketList.add(busTicket);
+            busTicketList.add(ticketService.buyTicket(trip, departureDate, travelerA));
 
             System.out.println("Do you want to buy another ticket? \n0- No \n1- Yes");
             endTickets = sc.nextInt();
