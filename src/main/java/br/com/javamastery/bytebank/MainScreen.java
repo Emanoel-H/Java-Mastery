@@ -6,6 +6,7 @@ import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.service.AuthService;
+import br.com.javamastery.service.TicketService;
 import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
@@ -29,6 +30,7 @@ public class MainScreen {
         Traveler travelerDB;
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         AuthService authService = new AuthService(em);
+        TicketService ticketService =  new TicketService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
