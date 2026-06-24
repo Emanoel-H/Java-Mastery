@@ -448,35 +448,7 @@ public class MainScreen {
 
             LocalDate departureDate = collectDepartureDate(sc, parser);
 
-            System.out.println("""
-                    Are you the one who is travelling?
-                    1 - Yes
-                    2 - No
-                    """);
-            String answerTraveller = sc.nextLine();
-
-            if (answerTraveller.equals("1") || answerTraveller.equalsIgnoreCase("Yes"))
-                bTraveller = true;
-
-            if (!bTraveller) {
-                System.out.println("Type ur name:");
-                name = sc.nextLine().replaceAll("\\d", "");
-
-                System.out.println("Type ur birth date:");
-                String dateFormatted = sc.nextLine();
-                birthDate = LocalDate.parse(dateFormatted, parser);
-
-                System.out.println("Type ur CPF:");
-                cpf = sc.nextLine();
-            } else {
-                name = traveler.getName();
-                birthDate = traveler.getBirthDate();
-                cpf = traveler.getCpf();
-            }
-
-            busTicket.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
-            busTicket.getTraveler().setCpf(cpf);
-            busTicket.getTraveler().setBirthDate(birthDate);
+            Traveler travelerA = collectTraveler(sc, traveler, parser);
 
             em.getTransaction().begin();
             busTicketDao.save(busTicket);
