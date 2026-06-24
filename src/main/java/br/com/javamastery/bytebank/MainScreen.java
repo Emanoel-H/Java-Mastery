@@ -450,9 +450,7 @@ public class MainScreen {
 
             Traveler travelerA = collectTraveler(sc, traveler, parser);
 
-            em.getTransaction().begin();
-            busTicketDao.save(busTicket);
-            em.getTransaction().commit();
+            ticketService.buyTicket(trip, departureDate, travelerA);
 
             busTicketList.add(busTicket);
 
