@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.util.List;
 
 public class TripService {
     public static final double PRICE_PER_KM = 0.35;
@@ -51,5 +52,9 @@ public class TripService {
             throw e;
         }
             return trip;
+    }
+
+    public List<Trip> searchTrips(Trip trip) {
+        return tripDAO.searchTrips(trip);
     }
 }
