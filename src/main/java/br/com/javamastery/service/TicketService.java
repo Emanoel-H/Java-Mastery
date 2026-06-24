@@ -1,6 +1,7 @@
 package br.com.javamastery.service;
 
 import br.com.javamastery.dao.BusTicketDAO;
+import br.com.javamastery.exception.CancellationDeadlineExceededException;
 import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.BusTicket;
 import br.com.javamastery.models.Traveler;
@@ -49,6 +50,14 @@ public class TicketService {
 
         if (busTicketDAO.searchSingleTicket(busTicket) == null)
             throw new TicketNotFoundException(ticketCode);
+        else
+            busTicket =  busTicketDAO.searchSingleTicket(busTicket);
+
+        LocalDateTime tripDateTime = LocalDateTime.of(busTicket.getDepartureDate(),
+                busTicket.getTrip().getDepartureTime());
+
+        if (!now.isBefore(tripDateTime.minusHours(1)))
+            throw new CancellationDeadlineExceededException();
 
         busTicket.setCancelDate(now);
         busTicket.setCanceled(true);
