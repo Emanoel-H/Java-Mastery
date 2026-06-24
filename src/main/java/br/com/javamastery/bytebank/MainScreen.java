@@ -648,4 +648,43 @@ public class MainScreen {
 
         return departureDate;
     }
+
+    public static Traveler collectTraveler(Scanner sc, Traveler buyer, DateTimeFormatter parser){
+        Traveler traveler = new Traveler();
+        boolean bTraveller = false;
+        String name, cpf;
+        LocalDate birthDate;
+
+        System.out.println("""
+                    Are you the one who is travelling?
+                    1 - Yes
+                    2 - No
+                    """);
+        String answerTraveller = sc.nextLine();
+
+        if (answerTraveller.equals("1") || answerTraveller.equalsIgnoreCase("Yes"))
+            bTraveller = true;
+
+        if (!bTraveller) {
+            System.out.println("Type ur name:");
+            name = sc.nextLine().replaceAll("\\d", "");
+
+            System.out.println("Type ur birth date:");
+            String dateFormatted = sc.nextLine();
+            birthDate = LocalDate.parse(dateFormatted, parser);
+
+            System.out.println("Type ur CPF:");
+            cpf = sc.nextLine();
+        } else {
+            name = buyer.getName();
+            birthDate = buyer.getBirthDate();
+            cpf = buyer.getCpf();
+        }
+
+        traveler.setName(Objects.requireNonNull(name, "Cannot be empty"));
+        traveler.setCpf(cpf);
+        traveler.setBirthDate(birthDate);
+
+        return traveler;
+    }
 }
