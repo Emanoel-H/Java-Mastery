@@ -47,11 +47,10 @@ public class TicketService {
         LocalDateTime now = LocalDateTime.now();
         BusTicket busTicket = new BusTicket();
         busTicket.setCode(ticketCode);
+        busTicket =  busTicketDAO.searchSingleTicket(busTicket);
 
-        if (busTicketDAO.searchSingleTicket(busTicket) == null)
+        if (busTicket == null)
             throw new TicketNotFoundException(ticketCode);
-        else
-            busTicket =  busTicketDAO.searchSingleTicket(busTicket);
 
         LocalDateTime tripDateTime = LocalDateTime.of(busTicket.getDepartureDate(),
                 busTicket.getTrip().getDepartureTime());
