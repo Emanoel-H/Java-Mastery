@@ -39,19 +39,18 @@ BusApp is a backend-focused Java project built to practice JPA/Hibernate, the DA
 ### Bus Company
 - Sign up / login with email and password
 - Email availability check on sign up (prevents duplicate accounts)
-- Create trips between cities with auto-suggested price based on **real driving distance** (via OSRM)
+- Create trips with auto-suggested price based on **real driving distance** (via OSRM)
 - View and manage existing trips (edit origin, destination, departure time, price)
 - Delete trips — blocked automatically if the trip already has tickets sold
 - Update company profile (legal name, trading name, CNPJ, telephone, password)
 
 ### System
-- Real route distance calculation via the **OSRM (Open Source Routing Machine)** API, with automatic fallback to the **Haversine formula** if the API is unavailable
+- Real route distance via the **OSRM API**, with automatic fallback to **Haversine**
 - Automatic trip category classification: `INTERCITY` or `INTERSTATE`
 - Automatic code generation for trips and tickets
-- Per-operation transaction handling (no long-lived transactions wrapping menu loops)
-- Brazilian city and state data with UF/name lookup
-- Credentials loaded from **environment variables** (no hardcoded secrets)
+- Per-operation transaction handling with rollback on failure
 - Custom domain exceptions for all business rule violations
+- Credentials loaded from **environment variables** (no hardcoded secrets)
 
 ---
 
@@ -63,7 +62,7 @@ BusApp is a backend-focused Java project built to practice JPA/Hibernate, the DA
 | ORM | Hibernate / Jakarta Persistence (JPA) |
 | Database | MySQL |
 | HTTP Client | Java 11+ native `HttpClient` |
-| JSON Mapping | Jackson (`jackson-databind`) |
+| JSON Mapping | Jackson (`jackson-databind` 2.18.3) |
 | External API | OSRM (routing/distance) |
 | Build | Maven |
 | Utilities | Lombok, FlatLaf (Swing UI prototype) |
@@ -85,7 +84,7 @@ src/main/java/br/com/javamastery/
 │   └── dto/
 │       └── OsrmResponse.java    # OSRM JSON response mapping
 │
-├── dao/                     # Data Access Layer — queries only
+├── dao/                     # Data Access Layer — queries only, no business logic
 │   ├── AddressDAO.java
 │   ├── BusCompanyDAO.java
 │   ├── BusTicketDAO.java
@@ -114,8 +113,9 @@ src/main/java/br/com/javamastery/
 │   ├── Traveler.java
 │   └── Trip.java
 │
-├── service/                 # Business logic layer (in progress)
-│   └── AuthService.java         # login, emailExists, checkEmailAvailable
+├── service/                 # Business logic layer
+│   ├── AuthService.java         # login(), emailExists(), checkEmailAvailable()
+│   └── TripService.java         # suggestPrice(), createTrip()
 │
 └── util/                    # Utilities
     ├── JPAUtils.java            # EntityManagerFactory singleton
@@ -174,20 +174,23 @@ cd Java-Mastery
 
 ### 2. Set up the database
 
-Create a MySQL database and import your schema. Make sure the tables match the entities in `models/`.
+Create a MySQL database and import your schema.
 
 ### 3. Configure environment variables
 
-See [Environment Variables](#environment-variables) section below.
+See [Environment Variables](#environment-variables) below.
 
 ### 4. Build and run
 
 ```bash
 mvn clean compile
-mvn exec:java -Dexec.mainClass="br.com.javamastery.bytebank.MainScreen"
-```
 
-> Run `BusCompanyMainScreen` instead to access the bus company flow.
+# Traveler flow
+mvn exec:java -Dexec.mainClass="br.com.javamastery.bytebank.MainScreen"
+
+# Bus company flow
+mvn exec:java -Dexec.mainClass="br.com.javamastery.bytebank.BusCompanyMainScreen"
+```
 
 ---
 
@@ -219,21 +222,23 @@ export DB_PASS="yourpassword"
 
 ### Recently Completed
 - ✅ Migrated from `javax.persistence` to `jakarta.persistence`
-- ✅ Fixed transaction scope — each write operation owns its own transaction
-- ✅ Added missing `@ManyToOne`/`@OneToOne` JPA mappings on `Trip` and `BusCompany`
+- ✅ Fixed transaction scope — each write operation owns its own transaction with rollback on failure
+- ✅ Added missing `@ManyToOne`/`@OneToOne` JPA mappings
 - ✅ Replaced Haversine-only distance with real route distance via OSRM, with fallback
-- ✅ Added `isTripActive()` guard to prevent deleting trips with existing ticket sales
-- ✅ Fixed `BigDecimal` price comparison (`compareTo` instead of `intValue`)
-- ✅ Fixed cancel/exit detection bug (`equalsIgnoreCase("C")` replacing broken char comparison)
+- ✅ Added `isTripActive()` guard to prevent deleting trips with ticket sales
+- ✅ Fixed `BigDecimal` comparison (`compareTo` instead of `intValue`)
+- ✅ Fixed cancel/exit detection bug (`equalsIgnoreCase("C")`)
 - ✅ Created `exception/` package with 8 typed domain exceptions
-- ✅ Created `service/AuthService` with `login()`, `emailExists()`, and `checkEmailAvailable()`
-- ✅ Integrated `AuthService` into both `MainScreen` and `BusCompanyMainScreen`, removing raw `EmailDAO` calls from UI
+- ✅ `AuthService` — `login()`, `emailExists()`, `checkEmailAvailable()`
+- ✅ `TripService` — `suggestPrice()`, `createTrip()` with rollback
+- ✅ `BusCompanyMainScreen.createTrip()` refactored into single-purpose input collectors (`collectOriginCity`, `collectDestinationCity`, `askPriceOrAcceptSuggestion`, `askDepartureTime`)
+- ✅ Passed `AuthService` as parameter to `signUp()` — eliminated duplicate instantiation
 
 ### In Progress
-- [ ] `TripService` — `createTrip()`, `suggestPrice()`, `deleteTrip()`, `updateTrip()`
 - [ ] `TicketService` — `buyTicket()`, `cancelTicket()`
 - [ ] `TravelerService` — `signUp()`, `updateProfile()`
-- [ ] Decompose large UI methods into single-purpose input collectors
+- [ ] `BusCompanyService` — `signUp()`, `updateProfile()`
+- [ ] Decompose remaining large UI methods into single-purpose collectors
 
 ---
 
