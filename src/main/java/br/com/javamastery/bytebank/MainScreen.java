@@ -428,14 +428,8 @@ public class MainScreen {
             BusTicket busTicket = new BusTicket();
 
             while (getBackCities) {
-                System.out.println("Where is your origin?");
-                List<City> allCities = addressDAO.searchCitiesByState("RJ");
-                allCities.forEach(c2 -> System.out.println(c2.getCity()));
-                String originCity = sc.nextLine();
-                cityA.setCity(originCity);
-                cityA.getState().setUf("RJ");
-                City cityDB = addressDAO.searchCity(cityA);
-                tripA.setOriginCity(cityDB);
+                City origin = collectOriginCity(sc, addressDAO)
+                tripA.setOriginCity(origin);
 
                 System.out.println("Where is your destination?");
                 allCities.forEach(c2 -> System.out.println(c2.toString()));
