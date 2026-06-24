@@ -420,6 +420,7 @@ public class MainScreen {
         AddressDAO addressDAO = new AddressDAO(em);
         TripDAO tripDAO = new TripDAO(em);
         Trip tripA = new Trip();
+        Trip trip = null;
         City cityA = new City();
 
         System.out.println("---------------------------");
@@ -439,20 +440,7 @@ public class MainScreen {
                 List<Trip> availableTrips = tripService.searchTrips(tripA);
 
                 if (!availableTrips.isEmpty()) {
-                    boolean getBackTrips = true;
-                    while (getBackTrips) {
-                        availableTrips.forEach(trip -> System.out.println(trip.toString()));
-
-                        System.out.println("Type in the code of the trip you selected: ");
-                        String tripCode = sc.nextLine().trim();
-                        tripA.setCode(tripCode);
-                        Trip tripDB = tripDAO.searchSingleTrip(tripA);
-                        if (tripDB != null) {
-                            busTicket.setTrip(tripDB);
-                            getBackTrips = false;
-                        }else
-                            System.out.println("There is no trip with that code. Try again!");
-                    }
+                    trip = collectTrip(sc, availableTrips, tripService);
                     getBackCities = false;
                 } else
                     throw new RuntimeException("There are no trips matching these cities you selected! Try again!");
