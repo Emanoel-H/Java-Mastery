@@ -478,11 +478,11 @@ public class MainScreen {
             busTicket.getTraveler().setCpf(cpf);
             busTicket.getTraveler().setBirthDate(birthDate);
 
-            busTicketList.add(busTicket);
-
             em.getTransaction().begin();
             busTicketDao.save(busTicket);
             em.getTransaction().commit();
+
+            busTicketList.add(busTicket);
 
             System.out.println("Do you want to buy another ticket?");
             endTickets = sc.nextInt();
