@@ -445,6 +445,7 @@ public class MainScreen {
                 } else
                     throw new RuntimeException("There are no trips matching these cities you selected! Try again!");
             }
+
             boolean getBackDeparture = true;
             while (getBackDeparture) {
                 try {
@@ -639,5 +640,27 @@ public class MainScreen {
         }
 
         return tripDB;
+    }
+
+    public static LocalDate collectDepartureDate(Scanner sc, DateTimeFormatter parser){
+        LocalDate  departureDate = null;
+
+        boolean getBackDeparture = true;
+        while (getBackDeparture) {
+            try {
+                System.out.println("Type in the date of when you are willing to travel: (pattern: dd/MM/yyyy)");
+                String departureDay = sc.nextLine();
+                departureDate = LocalDate.parse(departureDay, parser);
+
+                if (!departureDate.isBefore(LocalDate.now())) {
+                    getBackDeparture = false;
+                } else
+                    System.out.println("Invalid departure date! You can't travel to past! Try again!");
+            }catch (DateTimeParseException e) {
+                System.out.println("Invalid departure date! Try again!");
+            }
+        }
+
+        return departureDate;
     }
 }
