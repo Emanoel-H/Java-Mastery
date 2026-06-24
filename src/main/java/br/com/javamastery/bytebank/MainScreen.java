@@ -431,12 +431,8 @@ public class MainScreen {
                 City origin = collectOriginCity(sc, addressDAO)
                 tripA.setOriginCity(origin);
 
-                System.out.println("Where is your destination?");
-                allCities.forEach(c2 -> System.out.println(c2.toString()));
-                String destinationCity = sc.nextLine();
-                cityA.setCity(destinationCity);
-                cityDB = addressDAO.searchCity(cityA);
-                tripA.setDestinationCity(cityDB);
+                City destination = collectDestinationCity(sc, addressDAO);
+                tripA.setDestinationCity(destination);
 
                 List<Trip> availableTrips = tripDAO.searchTrips(tripA);
 
