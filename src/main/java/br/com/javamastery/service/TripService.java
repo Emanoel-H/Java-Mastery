@@ -57,4 +57,8 @@ public class TripService {
     public List<Trip> searchTrips(Trip trip) {
         return tripDAO.searchTrips(trip);
     }
+
+    public Trip searchSingleTrip(Trip trip) {
+        return tripDAO.searchSingleTrip(trip);
+    }
 }
