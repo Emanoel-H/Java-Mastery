@@ -2,7 +2,6 @@ package br.com.javamastery.bytebank;
 
 import br.com.javamastery.client.OsrmClient;
 import br.com.javamastery.dao.*;
-import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
