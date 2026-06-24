@@ -2,7 +2,6 @@ package br.com.javamastery.bytebank;
 
 import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.CancellationDeadlineExceededException;
-import br.com.javamastery.exception.EmailAlreadyExistsException;
 import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
