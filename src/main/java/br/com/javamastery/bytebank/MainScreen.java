@@ -351,14 +351,14 @@ public class MainScreen {
 
             if (!allTickets.isEmpty()) {
                 updateTicket(em);
-                cancelTicket(busTicketA, busTicketDao, em, ticketService);
+                cancelTicket(ticketService);
             }
         }else
             System.out.println("There is no tickets in your database!");
 
     }
 
-    private static void cancelTicket(BusTicket busTicketA, BusTicketDAO busTicketDao, EntityManager em, TicketService  ticketService) {
+    private static void cancelTicket(TicketService  ticketService) {
         Scanner sc = new Scanner(System.in);
         System.out.println("""
                 Do you wish to cancel a trip?
