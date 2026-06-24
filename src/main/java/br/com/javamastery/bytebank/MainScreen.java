@@ -525,4 +525,32 @@ public class MainScreen {
 
         busTicketList.forEach(System.out::println);
     }
+
+    public static City collectOriginCity(Scanner sc, AddressDAO addressDAO){
+        String cityName = "";
+        String stateName = "";
+        City originCity = null;
+        City cityA = new City();
+
+        while (cityName.isEmpty()) {
+            System.out.println("Type in the name of the origin city: \nIf you wish to view the cities before type 1");
+            cityName = sc.nextLine();
+
+            if (cityName.trim().charAt(0) == '1')
+                originCity = viewCities(stateName, addressDAO, sc, cityName);
+            else {
+                cityA.setCity(cityName.toLowerCase());
+                originCity = addressDAO.searchCity(cityA);
+
+                if (originCity == null){
+                    cityName = "";
+                    System.out.println("Type in a valid value!");
+                }
+            }
+        }
+
+        return originCity;
+    }
+
+    
 }
