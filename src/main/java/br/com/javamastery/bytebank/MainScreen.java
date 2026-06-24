@@ -90,7 +90,7 @@ public class MainScreen {
                             travelerA = new Traveler();
                             travelerA.setEmail(emailA);
                             travelerDB = travelerDAO.searchPerson(travelerA);
-                            buyBusTickets(travelerDB, em);
+                            buyBusTickets(travelerDB, em, ticketService);
                             break;
                         case 2:
                             viewTickets(emailA, em);
@@ -405,7 +405,7 @@ public class MainScreen {
         }
     }
 
-    private static void buyBusTickets(Traveler traveler, EntityManager em) {
+    private static void buyBusTickets(Traveler traveler, EntityManager em, TicketService ticketService) {
         Scanner sc = new Scanner(System.in);
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
