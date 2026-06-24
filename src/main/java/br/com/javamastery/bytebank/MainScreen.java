@@ -412,16 +412,9 @@ public class MainScreen {
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("ddMMyyyy");
-        boolean bTraveller = false;
-        String name, cpf;
-        LocalDate birthDate;
-
-        BusTicketDAO busTicketDao = new BusTicketDAO(em);
         AddressDAO addressDAO = new AddressDAO(em);
-        TripDAO tripDAO = new TripDAO(em);
         Trip tripA = new Trip();
         Trip trip = null;
-        City cityA = new City();
 
         System.out.println("---------------------------");
         System.out.println("      Bus Tickets App      ");
@@ -454,7 +447,7 @@ public class MainScreen {
 
             busTicketList.add(busTicket);
 
-            System.out.println("Do you want to buy another ticket?");
+            System.out.println("Do you want to buy another ticket? \n0- No \n1- Yes");
             endTickets = sc.nextInt();
             sc.nextLine();
         }
