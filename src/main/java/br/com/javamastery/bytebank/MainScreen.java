@@ -632,4 +632,24 @@ public class MainScreen {
 
         return destinationCity;
     }
+
+    public static Trip collectTrip(Scanner sc, List<Trip> availableTrips, TripService tripService){
+        boolean getBackTrips = true;
+        Trip tripA = new Trip();
+        Trip tripDB = null;
+        while (getBackTrips) {
+            availableTrips.forEach(trip -> System.out.println(trip.toString()));
+
+            System.out.println("Type in the code of the trip you selected: ");
+            String tripCode = sc.nextLine().trim();
+            tripA.setCode(tripCode);
+            tripDB = tripService.searchSingleTrip(tripA);
+            if (tripDB != null) {
+                getBackTrips = false;
+            }else
+                System.out.println("There is no trip with that code. Try again!");
+        }
+
+        return tripDB;
+    }
 }
