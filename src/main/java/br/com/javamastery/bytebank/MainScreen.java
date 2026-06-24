@@ -428,7 +428,7 @@ public class MainScreen {
             BusTicket busTicket = new BusTicket();
 
             while (getBackCities) {
-                City origin = collectOriginCity(sc, addressDAO)
+                City origin = collectOriginCity(sc, addressDAO);
                 tripA.setOriginCity(origin);
 
                 City destination = collectDestinationCity(sc, addressDAO);
