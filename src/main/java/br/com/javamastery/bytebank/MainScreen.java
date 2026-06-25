@@ -91,7 +91,7 @@ public class MainScreen {
                             travelerA = new Traveler();
                             travelerA.setEmail(emailA);
                             travelerDB = travelerService.searchPerson(travelerA);
-                            buyBusTickets(travelerDB, em, ticketService, tripService);
+                            buyBusTickets(travelerDB, em, ticketService, tripService, addressService);
                             break;
                         case 2:
                             viewTickets(emailA, ticketService, travelerService);
@@ -331,7 +331,7 @@ public class MainScreen {
         }
     }
 
-    private static void buyBusTickets(Traveler traveler, EntityManager em, TicketService ticketService, TripService tripService) {
+    private static void buyBusTickets(Traveler traveler, EntityManager em, TicketService ticketService, TripService tripService, AddressService addressService) {
         Scanner sc = new Scanner(System.in);
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
