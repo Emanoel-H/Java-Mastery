@@ -372,7 +372,6 @@ public class MainScreen {
 
         while (endTickets != 1){
             boolean getBackCities = true;
-            BusTicket busTicket = new BusTicket();
 
             while (getBackCities) {
                 City origin = collectOriginCity(sc, addressDAO);
