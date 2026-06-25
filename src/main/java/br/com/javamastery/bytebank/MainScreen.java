@@ -55,7 +55,7 @@ public class MainScreen {
                     case 1:
                         break;
                     case 2:
-                        signUp(sc, parser, travelerDAO, em, authService, travelerService);
+                        signUp(sc, parser, authService, travelerService);
                         break;
                     case 3:
                         exitSystem = true;
@@ -203,7 +203,7 @@ public class MainScreen {
         }
     }
 
-    private static void signUp(Scanner sc, DateTimeFormatter parser, TravelerDAO travelerDAO, EntityManager em, AuthService authService, TravelerService travelerService) {
+    private static void signUp(Scanner sc, DateTimeFormatter parser, AuthService authService, TravelerService travelerService) {
         String password;
         String emailAddress;
         System.out.println("Type ur name:");
