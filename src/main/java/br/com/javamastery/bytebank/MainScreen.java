@@ -7,6 +7,7 @@ import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.service.AuthService;
 import br.com.javamastery.service.TicketService;
+import br.com.javamastery.service.TravelerService;
 import br.com.javamastery.service.TripService;
 import br.com.javamastery.util.JPAUtils;
 
@@ -33,6 +34,7 @@ public class MainScreen {
         AuthService authService = new AuthService(em);
         TicketService ticketService =  new TicketService(em);
         TripService tripService = new TripService(em);
+        TravelerService travelerService = new TravelerService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
