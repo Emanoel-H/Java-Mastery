@@ -96,7 +96,7 @@ public class MainScreen {
                             buyBusTickets(travelerDB, em, ticketService, tripService);
                             break;
                         case 2:
-                            viewTickets(emailA, em, ticketService);
+                            viewTickets(emailA, em, ticketService, travelerService);
                             break;
                         case 3:
                             updateProfile(emailA, sc, parser, exitSystem, travelerService);
@@ -278,7 +278,7 @@ public class MainScreen {
         }
     }
 
-    private static void viewTickets(Email email, EntityManager em, TicketService  ticketService) {
+    private static void viewTickets(Email email, EntityManager em, TicketService  ticketService, TravelerService travelerService) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         BusTicket busTicketA = new BusTicket();
         Traveler travelerA = new Traveler();
