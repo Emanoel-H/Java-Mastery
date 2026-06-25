@@ -167,9 +167,7 @@ public class MainScreen {
                     travelerService.updatePassword(travelerDB, password);
                     break;
                 case 6:
-                    em.getTransaction().begin();
-                    travelerDAO.delete(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.deleteProfile(travelerDB);
                     exitWhile = true;
                     exitSystem = exitWhile;
                     break;
