@@ -96,7 +96,7 @@ public class MainScreen {
                             buyBusTickets(travelerDB, em, ticketService, tripService);
                             break;
                         case 2:
-                            viewTickets(emailA, em, ticketService, travelerService);
+                            viewTickets(emailA, ticketService, travelerService);
                             break;
                         case 3:
                             updateProfile(emailA, sc, parser, exitSystem, travelerService);
@@ -278,12 +278,10 @@ public class MainScreen {
         }
     }
 
-    private static void viewTickets(Email email, EntityManager em, TicketService  ticketService, TravelerService travelerService) {
-        BusTicketDAO busTicketDao = new BusTicketDAO(em);
+    private static void viewTickets(Email email, TicketService  ticketService, TravelerService travelerService) {
         BusTicket busTicketA = new BusTicket();
         Traveler travelerA = new Traveler();
         travelerA.setEmail(email);
-        TravelerDAO travelerDAO = new TravelerDAO(em);
         Scanner sc = new  Scanner(System.in);
 
         System.out.println("Do you wish to also view the canceled tickets? \n0- No \n1- Yes");
