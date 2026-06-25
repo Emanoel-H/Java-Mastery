@@ -252,7 +252,7 @@ public class MainScreen {
                 if (!ticketCode.equalsIgnoreCase("C")) {
                     busTicketA.setCode(ticketCode);
 
-                    busTicketSought = busTicketDao.searchSingleTicket(busTicketA);
+                    busTicketSought = ticketService.searchSingleTicket(busTicketA);
                     System.out.println(busTicketSought);
 
                     if (busTicketSought == null)
