@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TicketService {
     EntityManager em;
@@ -114,5 +115,9 @@ public class TicketService {
 
     public BusTicket searchSingleTicket(BusTicket busTicket){
         return busTicketDAO.searchSingleTicket(busTicket);
+    }
+    
+    public List<BusTicket> searchTickets(BusTicket busTicket){
+        return busTicketDAO.searchTickets(busTicket);
     }
 }
