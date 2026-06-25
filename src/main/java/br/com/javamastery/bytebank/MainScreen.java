@@ -229,7 +229,7 @@ public class MainScreen {
         travelerService.signUp(name, birthDate, cpf, emailAddress, password, telephone);
     }
 
-    private static void updateTicket(EntityManager em) {
+    private static void updateTicket(EntityManager em, TicketService ticketService) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
         BusTicket busTicketSought;
         BusTicket busTicketA = new BusTicket();
@@ -340,7 +340,7 @@ public class MainScreen {
             allTickets.forEach(bt2 -> System.out.println(bt2.toString()));
 
             if (!allTickets.isEmpty()) {
-                updateTicket(em);
+                updateTicket(em, ticketService);
                 cancelTicket(ticketService);
             }
         }else
