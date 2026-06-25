@@ -273,31 +273,19 @@ public class MainScreen {
                                 case 1:
                                     System.out.println("Type in your name: ");
                                     String name = sc.nextLine().replaceAll("\\d", "");
-                                    busTicketSought.getTraveler().setName(Objects.requireNonNull(name, "Cannot be empty"));
-
-                                    em.getTransaction().begin();
-                                    busTicketDao.update(busTicketSought);
-                                    em.getTransaction().commit();
+                                    ticketService.updateTravelerName(busTicketSought, name);
                                     break;
                                 case 2:
                                     System.out.println("Type in your CPF: ");
                                     cpf = sc.nextLine();
-                                    busTicketSought.getTraveler().setCpf(cpf);
-
-                                    em.getTransaction().begin();
-                                    busTicketDao.update(busTicketSought);
-                                    em.getTransaction().commit();
+                                    ticketService.updateTravelerCPF(busTicketSought, cpf);
                                     break;
                                 case 3:
                                     DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                                     System.out.println("Type in your birth date: ");
                                     String dateFormatted = sc.nextLine();
                                     LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
-                                    busTicketSought.getTraveler().setBirthDate(birthDate);
-
-                                    em.getTransaction().begin();
-                                    busTicketDao.update(busTicketSought);
-                                    em.getTransaction().commit();
+                                    ticketService.updateTravelerBirthDate(busTicketSought, birthDate);
                                     break;
                                 case 4:
                                     System.out.println("Exiting...");
