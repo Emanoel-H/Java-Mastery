@@ -100,7 +100,7 @@ public class MainScreen {
                             viewTickets(emailA, em, ticketService);
                             break;
                         case 3:
-                            updateProfile(emailA, travelerDAO, sc, parser, em, exitSystem, travelerService);
+                            updateProfile(emailA, sc, parser, exitSystem, travelerService);
                             break;
                         case 4:
                             exitSystem = true;
@@ -115,7 +115,7 @@ public class MainScreen {
         em.close();
     }
 
-    private static void updateProfile(Email emailA, TravelerDAO travelerDAO, Scanner sc, DateTimeFormatter parser, EntityManager em, boolean exitSystem, TravelerService travelerService) {
+    private static void updateProfile(Email emailA, Scanner sc, DateTimeFormatter parser, boolean exitSystem, TravelerService travelerService) {
         String password;
         Traveler travelerA;
         Traveler travelerDB;
