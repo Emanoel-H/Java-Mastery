@@ -121,7 +121,7 @@ public class MainScreen {
         Traveler travelerDB;
         travelerA = new Traveler();
         travelerA.setEmail(emailA);
-        travelerDB = travelerDAO.searchPerson(travelerA);
+        travelerDB = travelerService.searchPerson(travelerA);
 
         boolean exitWhile = false;
         while (!exitWhile) {
