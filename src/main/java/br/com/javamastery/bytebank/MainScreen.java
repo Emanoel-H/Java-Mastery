@@ -231,9 +231,7 @@ public class MainScreen {
 
     private static void updateTicket(EntityManager em) {
         BusTicketDAO busTicketDao = new BusTicketDAO(em);
-        City cityA = new City();
         BusTicket busTicketSought;
-        cityA.getState().setUf("RJ");
         BusTicket busTicketA = new BusTicket();
         Scanner sc = new Scanner(System.in);
         String cpf;
