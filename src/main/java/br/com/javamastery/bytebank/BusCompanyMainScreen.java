@@ -7,6 +7,7 @@ import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
 import br.com.javamastery.service.AuthService;
+import br.com.javamastery.service.BusCompanyService;
 import br.com.javamastery.service.TripService;
 import br.com.javamastery.util.JPAUtils;
 
@@ -32,6 +33,7 @@ public class BusCompanyMainScreen {
         BusCompany busCompanyDB;
         AuthService authService = new AuthService(em);
         TripService tripService = new TripService(em);
+        BusCompanyService busCompanyService = new BusCompanyService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
@@ -52,7 +54,7 @@ public class BusCompanyMainScreen {
                     case 1:
                         break;
                     case 2:
-                        signUp(sc, busCompanyDAO, em, authService);
+                        signUp(sc, busCompanyDAO, em, authService, busCompanyService);
                         break;
                     case 3:
                         exitSystem = true;
@@ -516,7 +518,7 @@ public class BusCompanyMainScreen {
         return cityDB;
     }
 
-    private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em, AuthService authService) {
+    private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em, AuthService authService, BusCompanyService busCompanyService) {
         String password;
         String emailAddress;
         System.out.println("Type your Legal Name:");
@@ -538,17 +540,7 @@ public class BusCompanyMainScreen {
         System.out.print("\nPassword: ");
         password = sc.nextLine();
 
-        BusCompany busCompany = new BusCompany();
-        busCompany.setLegalName(Objects.requireNonNull(legalName, "Cannot be empty"));
-        busCompany.setTradingName(Objects.requireNonNull(tradingName, "Cannot be empty"));
-        busCompany.setCnpj(cnpj);
-        busCompany.setTelephone(telephone);
-        busCompany.getEmail().setEmail(Objects.requireNonNull(emailAddress, "Cannot be empty"));
-        busCompany.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
-
-        em.getTransaction().begin();
-        busCompanyDAO.save(busCompany);
-        em.getTransaction().commit();
+        busCompanyService.signUp(legalName, tradingName, cnpj, telephone, emailAddress, password);
     }
 
     private static City collectOriginCity(AddressDAO addressDAO, Scanner sc){
