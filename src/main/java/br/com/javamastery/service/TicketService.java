@@ -111,4 +111,8 @@ public class TicketService {
             throw new RuntimeException(e);
         }
     }
+
+    public BusTicket searchSingleTicket(BusTicket busTicket){
+        return busTicketDAO.searchSingleTicket(busTicket);
+    }
 }
