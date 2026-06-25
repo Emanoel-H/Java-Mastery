@@ -54,7 +54,7 @@ public class BusCompanyMainScreen {
                     case 1:
                         break;
                     case 2:
-                        signUp(sc, busCompanyDAO, em, authService, busCompanyService);
+                        signUp(sc, authService, busCompanyService);
                         break;
                     case 3:
                         exitSystem = true;
@@ -518,7 +518,7 @@ public class BusCompanyMainScreen {
         return cityDB;
     }
 
-    private static void signUp(Scanner sc, BusCompanyDAO busCompanyDAO, EntityManager em, AuthService authService, BusCompanyService busCompanyService) {
+    private static void signUp(Scanner sc, AuthService authService, BusCompanyService busCompanyService) {
         String password;
         String emailAddress;
         System.out.println("Type your Legal Name:");
