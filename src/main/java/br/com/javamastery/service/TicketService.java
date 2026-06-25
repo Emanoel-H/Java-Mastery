@@ -85,4 +85,17 @@ public class TicketService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateTravelerCPF(BusTicket busTicket, String travelerCPF){
+        busTicket.getTraveler().setCpf(travelerCPF);
+
+        try{
+            this.em.getTransaction().begin();
+            this.busTicketDAO.update(busTicket);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
