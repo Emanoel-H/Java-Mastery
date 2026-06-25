@@ -22,7 +22,6 @@ public class MainScreen {
     public static void main(String[] args) {
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
-        TravelerDAO travelerDAO = new TravelerDAO(em);
         Scanner sc = new Scanner(System.in);
         boolean exitSystem = false;
         Email emailA = new Email();
