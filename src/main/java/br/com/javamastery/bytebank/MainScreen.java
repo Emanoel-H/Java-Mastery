@@ -1,7 +1,5 @@
 package br.com.javamastery.bytebank;
 
-import br.com.javamastery.dao.*;
-import br.com.javamastery.exception.CancellationDeadlineExceededException;
 import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.TicketNotFoundException;
 import br.com.javamastery.models.*;
@@ -10,7 +8,6 @@ import br.com.javamastery.util.JPAUtils;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -336,7 +333,6 @@ public class MainScreen {
         List<BusTicket> busTicketList = new ArrayList<>();
         int endTickets = 0;
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("ddMMyyyy");
-        AddressDAO addressDAO = new AddressDAO(em);
         Trip tripA = new Trip();
         Trip trip = null;
 
@@ -347,10 +343,10 @@ public class MainScreen {
             boolean getBackCities = true;
 
             while (getBackCities) {
-                City origin = collectOriginCity(sc, addressDAO);
+                City origin = collectOriginCity(sc, addressService);
                 tripA.setOriginCity(origin);
 
-                City destination = collectDestinationCity(sc, addressDAO);
+                City destination = collectDestinationCity(sc, addressService);
                 tripA.setDestinationCity(destination);
 
                 List<Trip> availableTrips = tripService.searchTrips(tripA);
@@ -376,7 +372,7 @@ public class MainScreen {
         busTicketList.forEach(System.out::println);
     }
 
-    public static City collectOriginCity(Scanner sc, AddressDAO addressDAO){
+    public static City collectOriginCity(Scanner sc, AddressService addressService){
         String cityName = "";
         String stateName = "";
         City originCity = null;
@@ -387,10 +383,10 @@ public class MainScreen {
             cityName = sc.nextLine();
 
             if (cityName.trim().charAt(0) == '1')
-                originCity = viewCities(stateName, addressDAO, sc, cityName);
+                originCity = viewCities(stateName, sc, cityName, addressService);
             else {
                 cityA.setCity(cityName.toLowerCase());
-                originCity = addressDAO.searchCity(cityA);
+                originCity = addressService.searchCity(cityA);
 
                 if (originCity == null){
                     cityName = "";
@@ -402,12 +398,12 @@ public class MainScreen {
         return originCity;
     }
 
-    private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
+    private static City viewCities(String stateName, Scanner sc, String cityName, AddressService addressService) {
         City cityDB = null;
         cityName = "";
         while (stateName.isEmpty()) {
             System.out.println("From which state do you want to search the cities?");
-            List<State> allStates = addressDAO.searchAllState();
+            List<State> allStates = addressService.searchAllState();
             allStates.forEach(s -> System.out.println(s.toString()));
             stateName = sc.nextLine();
 
@@ -442,7 +438,7 @@ public class MainScreen {
 
         if (!stateName.isEmpty()) {
             while (cityName.isEmpty()) {
-                List<City> citiesByState = addressDAO.searchCitiesByState(stateName);
+                List<City> citiesByState = addressService.searchCitiesByState(stateName);
                 System.out.printf("Cities from the state %s\n", stateName);
                 citiesByState.forEach(c -> System.out.println(c.toString()));
                 System.out.println("Type in your selected city:");
@@ -458,14 +454,14 @@ public class MainScreen {
             if (!cityName.isEmpty()){
                 City cityA = new City();
                 cityA.setCity(cityName);
-                cityDB = addressDAO.searchCity(cityA);
+                cityDB = addressService.searchCity(cityA);
             }
         }
 
         return cityDB;
     }
 
-    private static City collectDestinationCity(Scanner sc, AddressDAO addressDAO){
+    private static City collectDestinationCity(Scanner sc, AddressService addressService){
         String cityName = "";
         String stateName = "";
         City destinationCity = null;
@@ -476,10 +472,10 @@ public class MainScreen {
             cityName = sc.nextLine();
 
             if (cityName.trim().charAt(0) == '1')
-                destinationCity = viewCities(stateName, addressDAO, sc, cityName);
+                destinationCity = viewCities(stateName, sc, cityName, addressService);
             else {
                 cityA.setCity(cityName.toLowerCase());
-                destinationCity = addressDAO.searchCity(cityA);
+                destinationCity = addressService.searchCity(cityA);
 
                 if (destinationCity == null){
                     cityName = "";
