@@ -93,7 +93,7 @@ public class MainScreen {
                         case 1:
                             travelerA = new Traveler();
                             travelerA.setEmail(emailA);
-                            travelerDB = travelerDAO.searchPerson(travelerA);
+                            travelerDB = travelerService.searchPerson(travelerA);
                             buyBusTickets(travelerDB, em, ticketService, tripService);
                             break;
                         case 2:
