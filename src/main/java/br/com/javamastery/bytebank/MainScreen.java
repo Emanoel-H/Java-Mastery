@@ -292,7 +292,7 @@ public class MainScreen {
         busTicketA.setCanceled(canceledTickets.trim().replaceAll("\\D", "").equals("1") || canceledTickets.trim().replaceAll("\\d", "").equalsIgnoreCase("Yes"));
 
         busTicketA.getTraveler().setId(travelerService.searchPerson(travelerA).getId());
-        List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
+        List<BusTicket> allTickets = ticketService.searchTickets(busTicketA);
 
         if (!allTickets.isEmpty()) {
             String messageToDisplay = "Here is your ticket: ";

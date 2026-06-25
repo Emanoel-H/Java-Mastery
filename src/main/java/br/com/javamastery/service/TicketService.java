@@ -116,7 +116,7 @@ public class TicketService {
     public BusTicket searchSingleTicket(BusTicket busTicket){
         return busTicketDAO.searchSingleTicket(busTicket);
     }
-    
+
     public List<BusTicket> searchTickets(BusTicket busTicket){
         return busTicketDAO.searchTickets(busTicket);
     }
