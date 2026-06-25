@@ -98,4 +98,17 @@ public class TicketService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateTravelerBirthDate(BusTicket busTicket, LocalDate birthDate){
+        busTicket.getTraveler().setBirthDate(birthDate);
+
+        try{
+            this.em.getTransaction().begin();
+            this.busTicketDAO.update(busTicket);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
