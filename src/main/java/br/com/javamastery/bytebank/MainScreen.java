@@ -226,17 +226,7 @@ public class MainScreen {
         System.out.println("Type ur telephone:");
         String telephone = sc.nextLine();
 
-        Traveler travelerA = new Traveler();
-        travelerA.setName(Objects.requireNonNull(name, "Cannot be empty"));
-        travelerA.setBirthDate(birthDate);
-        travelerA.setCpf(cpf);
-        travelerA.getEmail().setEmail(Objects.requireNonNull(emailAddress, "Cannot be empty"));
-        travelerA.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
-        travelerA.setTelephone(telephone);
-
-        em.getTransaction().begin();
-        travelerDAO.save(travelerA);
-        em.getTransaction().commit();
+        travelerService.signUp(name, birthDate, cpf, emailAddress, password, telephone);
     }
 
     private static void updateTicket(EntityManager em) {
