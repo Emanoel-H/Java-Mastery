@@ -98,13 +98,13 @@ public class BusCompanyMainScreen {
                         case 2:
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
-                            busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
+                            busCompanyDB = busCompanyService.searchCompany(busCompanyA);
                             viewTrips(em, busCompanyDB, tripService);
                             break;
                         case 3:
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
-                            busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
+                            busCompanyDB = busCompanyService.searchCompany(busCompanyA);
                             updateProfile(sc, busCompanyDB, busCompanyDAO, em);
                             break;
                         case 4:
