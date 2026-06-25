@@ -84,7 +84,7 @@ src/main/java/br/com/javamastery/
 │   └── dto/
 │       └── OsrmResponse.java    # OSRM JSON response mapping
 │
-├── dao/                     # Data Access Layer — queries only, no business logic
+├── dao/                     # Data Access Layer — queries only
 │   ├── AddressDAO.java
 │   ├── BusCompanyDAO.java
 │   ├── BusTicketDAO.java
@@ -115,7 +115,8 @@ src/main/java/br/com/javamastery/
 │
 ├── service/                 # Business logic layer
 │   ├── AuthService.java         # login(), emailExists(), checkEmailAvailable()
-│   └── TripService.java         # suggestPrice(), createTrip()
+│   ├── TicketService.java       # buyTicket(), cancelTicket()
+│   └── TripService.java         # suggestPrice(), createTrip(), searchTrips(), searchSingleTrip()
 │
 └── util/                    # Utilities
     ├── JPAUtils.java            # EntityManagerFactory singleton
@@ -223,23 +224,22 @@ export DB_PASS="yourpassword"
 ### Recently Completed
 - ✅ Migrated from `javax.persistence` to `jakarta.persistence`
 - ✅ Fixed transaction scope — each write operation owns its own transaction with rollback on failure
-- ✅ Added missing `@ManyToOne`/`@OneToOne` JPA mappings
-- ✅ Replaced Haversine-only distance with real route distance via OSRM, with fallback
-- ✅ Added `isTripActive()` guard to prevent deleting trips with ticket sales
+- ✅ Added missing JPA mappings (`@ManyToOne`, `@OneToOne`)
+- ✅ Real route distance via OSRM with Haversine fallback
+- ✅ `isTripActive()` guard prevents deleting trips with ticket sales
 - ✅ Fixed `BigDecimal` comparison (`compareTo` instead of `intValue`)
-- ✅ Fixed cancel/exit detection bug (`equalsIgnoreCase("C")`)
-- ✅ Created `exception/` package with 8 typed domain exceptions
-- ✅ `AuthService` — `login()`, `emailExists()`, `checkEmailAvailable()`
-- ✅ `TripService` — `suggestPrice()`, `createTrip()` with rollback
-- ✅ `BusCompanyMainScreen.createTrip()` refactored into single-purpose input collectors (`collectOriginCity`, `collectDestinationCity`, `askPriceOrAcceptSuggestion`, `askDepartureTime`)
-- ✅ Passed `AuthService` as parameter to `signUp()` — eliminated duplicate instantiation
+- ✅ Fixed cancel/exit detection (`equalsIgnoreCase("C")`)
+- ✅ 8 typed domain exceptions in `exception/`
+- ✅ `AuthService` — login, emailExists, checkEmailAvailable
+- ✅ `TripService` — suggestPrice, createTrip, searchTrips, searchSingleTrip
+- ✅ `TicketService` — buyTicket, cancelTicket (single DAO query on cancel)
+- ✅ `MainScreen.buyBusTickets()` decomposed into: `collectOriginCity`, `collectDestinationCity`, `collectTrip`, `collectDepartureDate`, `collectTraveler`
+- ✅ `BusCompanyMainScreen.createTrip()` decomposed into: `collectOriginCity`, `collectDestinationCity`, `askPriceOrAcceptSuggestion`, `askDepartureTime`
 
 ### In Progress
-- [ ] `TicketService` — `buyTicket()`, `cancelTicket()`
-- [ ] `TravelerService` — `signUp()`, `updateProfile()`
-- [ ] `BusCompanyService` — `signUp()`, `updateProfile()`
-- [ ] Decompose remaining large UI methods into single-purpose collectors
-
+- [ ] `TravelerService` — signUp(), updateProfile(), deleteProfile()
+- [ ] `BusCompanyService` — signUp(), updateProfile()
+- [ ] Move remaining `em.getTransaction()` calls out of UI methods
 ---
 
 ## Author
