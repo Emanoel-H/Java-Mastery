@@ -6,6 +6,7 @@ import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
 import br.com.javamastery.models.*;
+import br.com.javamastery.service.AddressService;
 import br.com.javamastery.service.AuthService;
 import br.com.javamastery.service.BusCompanyService;
 import br.com.javamastery.service.TripService;
@@ -34,6 +35,7 @@ public class BusCompanyMainScreen {
         AuthService authService = new AuthService(em);
         TripService tripService = new TripService(em);
         BusCompanyService busCompanyService = new BusCompanyService(em);
+        AddressService addressService = new AddressService(em);
 
         while (!exitSystem) {
             System.out.println("Please, fill up your data to log in:");
@@ -93,13 +95,13 @@ public class BusCompanyMainScreen {
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyService.searchCompany(busCompanyA);
-                            createTrip(em, sc, busCompanyDB, tripService);
+                            createTrip(sc, busCompanyDB, tripService, addressService);
                             break;
                         case 2:
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyService.searchCompany(busCompanyA);
-                            viewTrips(em, busCompanyDB, tripService);
+                            viewTrips(em, busCompanyDB, tripService, addressService);
                             break;
                         case 3:
                             busCompanyA = new BusCompany();
@@ -232,7 +234,7 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void viewTrips(EntityManager em, BusCompany busCompanyDB, TripService tripService) {
+    private static void viewTrips(EntityManager em, BusCompany busCompanyDB, TripService tripService, AddressService addressService) {
         TripDAO tripDAO = new TripDAO(em);
         Trip tripA = new Trip();
         tripA.setBusCompany(busCompanyDB);
@@ -249,7 +251,7 @@ public class BusCompanyMainScreen {
             allTrips.forEach(t2 -> System.out.println(t2.toString()));
 
             if (!allTrips.isEmpty()) {
-                editTrip(em, tripA, tripDAO, tripService);
+                editTrip(em, tripA, tripDAO, tripService, addressService);
                 deleteTrip(em, tripA, tripDAO);
             }
         }else
@@ -290,10 +292,9 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void editTrip(EntityManager em, Trip tripA, TripDAO tripDAO, TripService tripService) {
+    private static void editTrip(EntityManager em, Trip tripA, TripDAO tripDAO, TripService tripService, AddressService addressService) {
         boolean getBack;
         String cityName, stateName = "";
-        AddressDAO addressDAO = new AddressDAO(em);
         City cityA = new City();
         City cityDB;
         OsrmClient osrmClient = new OsrmClient();
@@ -340,10 +341,10 @@ public class BusCompanyMainScreen {
                             cityName = sc.nextLine();
 
                             if (cityName.trim().charAt(0) == '1')
-                                tripDB.setOriginCity(viewCities(stateName, addressDAO, sc, cityName));
+                                tripDB.setOriginCity(viewCities(stateName,sc, cityName, addressService));
                             else {
                                 cityA.setCity(cityName.toLowerCase());
-                                cityDB = addressDAO.searchCity(cityA);
+                                cityDB = addressService.searchCity(cityA);
 
                                 if (cityDB != null)
                                     tripDB.setOriginCity(cityDB);
@@ -369,10 +370,10 @@ public class BusCompanyMainScreen {
                             cityName = sc.nextLine();
 
                             if (cityName.trim().charAt(0) == '1')
-                                tripDB.setDestinationCity(viewCities(stateName, addressDAO, sc, cityName));
+                                tripDB.setDestinationCity(viewCities(stateName, sc, cityName, addressService));
                             else {
                                 cityA.setCity(cityName.toLowerCase());
-                                cityDB = addressDAO.searchCity(cityA);
+                                cityDB = addressService.searchCity(cityA);
 
                                 if (cityDB != null)
                                     tripDB.setDestinationCity(cityDB);
@@ -440,11 +441,9 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void createTrip(EntityManager em, Scanner sc, BusCompany busCompanyDB, TripService tripService) {
-        AddressDAO addressDAO = new AddressDAO(em);
-
-        City origin = collectOriginCity(addressDAO, sc);
-        City destination = collectDestinationCity(addressDAO, sc);
+    private static void createTrip(Scanner sc, BusCompany busCompanyDB, TripService tripService, AddressService addressService) {
+        City origin = collectOriginCity(sc, addressService);
+        City destination = collectDestinationCity(sc, addressService);
         double suggestedPrice = tripService.suggestPrice(origin, destination);
         BigDecimal price = askPriceOrAcceptSuggestion(sc, suggestedPrice);
         LocalTime departureTime = askDepartureTime(sc);
@@ -455,12 +454,12 @@ public class BusCompanyMainScreen {
         System.out.println(trip);
     }
 
-    private static City viewCities(String stateName, AddressDAO addressDAO, Scanner sc, String cityName) {
+    private static City viewCities(String stateName, Scanner sc, String cityName, AddressService addressService) {
         City cityDB = null;
         cityName = "";
         while (stateName.isEmpty()) {
             System.out.println("From which state do you want to search the cities?");
-            List<State> allStates = addressDAO.searchAllState();
+            List<State> allStates = addressService.searchAllState();
             allStates.forEach(s -> System.out.println(s.toString()));
             stateName = sc.nextLine();
 
@@ -495,7 +494,7 @@ public class BusCompanyMainScreen {
 
         if (!stateName.isEmpty()) {
             while (cityName.isEmpty()) {
-                List<City> citiesByState = addressDAO.searchCitiesByState(stateName);
+                List<City> citiesByState = addressService.searchCitiesByState(stateName);
                 System.out.printf("Cities from the state %s\n", stateName);
                 citiesByState.forEach(c -> System.out.println(c.toString()));
                 System.out.println("Type in your selected city:");
@@ -511,7 +510,7 @@ public class BusCompanyMainScreen {
             if (!cityName.isEmpty()){
                 City cityA = new City();
                 cityA.setCity(cityName);
-                cityDB = addressDAO.searchCity(cityA);
+                cityDB = addressService.searchCity(cityA);
             }
         }
 
@@ -543,7 +542,7 @@ public class BusCompanyMainScreen {
         busCompanyService.signUp(legalName, tradingName, cnpj, telephone, emailAddress, password);
     }
 
-    private static City collectOriginCity(AddressDAO addressDAO, Scanner sc){
+    private static City collectOriginCity(Scanner sc, AddressService addressService) {
         String cityName = "";
         String stateName = "";
         City originCity = null;
@@ -554,10 +553,10 @@ public class BusCompanyMainScreen {
             cityName = sc.nextLine();
 
             if (cityName.trim().charAt(0) == '1')
-                originCity = viewCities(stateName, addressDAO, sc, cityName);
+                originCity = viewCities(stateName, sc, cityName, addressService);
             else {
                 cityA.setCity(cityName.toLowerCase());
-                originCity = addressDAO.searchCity(cityA);
+                originCity = addressService.searchCity(cityA);
 
                 if (originCity == null){
                     cityName = "";
@@ -569,7 +568,7 @@ public class BusCompanyMainScreen {
         return originCity;
     }
 
-    private static City collectDestinationCity(AddressDAO addressDAO, Scanner sc){
+    private static City collectDestinationCity(Scanner sc, AddressService addressService){
         String cityName = "";
         String stateName = "";
         City destinationCity = null;
@@ -580,10 +579,10 @@ public class BusCompanyMainScreen {
             cityName = sc.nextLine();
 
             if (cityName.trim().charAt(0) == '1')
-                destinationCity = viewCities(stateName, addressDAO, sc, cityName);
+                destinationCity = viewCities(stateName, sc, cityName, addressService);
             else {
                 cityA.setCity(cityName.toLowerCase());
-                destinationCity = addressDAO.searchCity(cityA);
+                destinationCity = addressService.searchCity(cityA);
 
                 if (destinationCity == null){
                     cityName = "";
