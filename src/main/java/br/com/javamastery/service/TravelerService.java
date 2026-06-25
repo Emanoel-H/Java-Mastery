@@ -112,4 +112,8 @@ public class TravelerService {
             throw new RuntimeException(e);
         }
     }
+
+    public Traveler searchPerson(Traveler traveler){
+        return travelerDAO.searchPerson(traveler);
+    }
 }
