@@ -92,7 +92,7 @@ public class BusCompanyMainScreen {
                         case 1:
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
-                            busCompanyDB = busCompanyDAO.searchCompany(busCompanyA);
+                            busCompanyDB = busCompanyService.searchCompany(busCompanyA);
                             createTrip(em, sc, busCompanyDB, tripService);
                             break;
                         case 2:
