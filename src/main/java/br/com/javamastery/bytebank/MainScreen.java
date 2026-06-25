@@ -291,7 +291,7 @@ public class MainScreen {
 
         busTicketA.setCanceled(canceledTickets.trim().replaceAll("\\D", "").equals("1") || canceledTickets.trim().replaceAll("\\d", "").equalsIgnoreCase("Yes"));
 
-        busTicketA.getTraveler().setId(travelerDAO.searchPerson(travelerA).getId());
+        busTicketA.getTraveler().setId(travelerService.searchPerson(travelerA).getId());
         List<BusTicket> allTickets = busTicketDao.searchTickets(busTicketA);
 
         if (!allTickets.isEmpty()) {
