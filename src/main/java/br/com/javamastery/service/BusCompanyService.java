@@ -35,4 +35,8 @@ public class BusCompanyService {
 
         return busCompany;
     }
+
+    public BusCompany searchCompany(BusCompany busCompany){
+        return busCompanyDAO.searchCompany(busCompany);
+    }
 }
