@@ -143,48 +143,28 @@ public class MainScreen {
                 case 1:
                     System.out.println("Type in your name: ");
                     String name = sc.nextLine().replaceAll("\\d", "");
-                    travelerDB.setName(Objects.requireNonNull(name, "Cannot be empty"));
-
-                    em.getTransaction().begin();
-                    travelerDAO.update(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.updateName(travelerDB, name);
                     break;
                 case 2:
                     System.out.println("Type in your CPF: ");
                     String cpf = sc.nextLine();
-                    travelerDB.setCpf(cpf);
-
-                    em.getTransaction().begin();
-                    travelerDAO.update(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.updateCPF(travelerDB, cpf);
                     break;
                 case 3:
                     System.out.println("Type in your birth date: ");
                     String dateFormatted = sc.nextLine();
                     LocalDate birthDate = LocalDate.parse(dateFormatted, parser);
-                    travelerDB.setBirthDate(birthDate);
-
-                    em.getTransaction().begin();
-                    travelerDAO.update(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.updateBirthDate(travelerDB, birthDate);
                     break;
                 case 4:
                     System.out.println("Type in your telephone: ");
                     String telephone = sc.nextLine();
-                    travelerDB.setTelephone(telephone);
-
-                    em.getTransaction().begin();
-                    travelerDAO.update(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.updateTelephone(travelerDB, telephone);
                     break;
                 case 5:
                     System.out.println("Type in your new password: ");
                     password = sc.nextLine();
-                    travelerDB.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
-
-                    em.getTransaction().begin();
-                    travelerDAO.update(travelerDB);
-                    em.getTransaction().commit();
+                    travelerService.updatePassword(travelerDB, password);
                     break;
                 case 6:
                     em.getTransaction().begin();
