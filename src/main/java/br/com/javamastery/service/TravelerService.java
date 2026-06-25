@@ -101,4 +101,15 @@ public class TravelerService {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteProfile(Traveler traveler){
+        try{
+            this.em.getTransaction().begin();
+            this.travelerDAO.delete(traveler);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
