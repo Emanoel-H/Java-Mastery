@@ -645,4 +645,18 @@ public class BusCompanyMainScreen {
 
         return newPassword;
     }
+
+    public static String collectCnpj(Scanner sc){
+        String newCNPJ;
+        do {
+            System.out.print("Type in your new CNPJ: ");
+            newCNPJ = sc.nextLine().trim();
+
+            if (newCNPJ.isEmpty()) {
+                System.out.println("CNPJ cannot be empty. Please try again.");
+            }
+        } while (newCNPJ.isEmpty());
+
+        return newCNPJ;
+    }
 }
