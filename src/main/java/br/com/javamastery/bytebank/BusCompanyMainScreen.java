@@ -644,4 +644,18 @@ public class BusCompanyMainScreen {
 
         return tradingName;
     }
+
+    public static String collectPassword(Scanner sc){
+        String newPassword;
+        do {
+            System.out.print("Type in your new Password: ");
+            newPassword = sc.nextLine().trim();
+
+            if (newPassword.isEmpty()) {
+                System.out.println("A password cannot be empty. Please try again.");
+            }
+        } while (newPassword.isEmpty());
+
+        return newPassword;
+    }
 }
