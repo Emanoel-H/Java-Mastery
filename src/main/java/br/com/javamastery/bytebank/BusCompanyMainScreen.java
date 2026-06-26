@@ -251,7 +251,7 @@ public class BusCompanyMainScreen {
                 tripDB = tripService.searchSingleTrip(tripA);
 
                 if (tripDB == null)
-                    throw new IllegalArgumentException("Type in a valid code!");
+                    throw new TripNotFoundException(tripCode);
                 else
                     getBack = false;
             }
