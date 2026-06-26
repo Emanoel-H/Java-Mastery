@@ -186,7 +186,7 @@ public class BusCompanyMainScreen {
             allTrips.forEach(t2 -> System.out.println(t2.toString()));
 
             if (!allTrips.isEmpty()) {
-                editTrip(em, tripA, tripDAO, tripService, addressService);
+                editTrip(tripA, tripService, addressService);
                 deleteTrip(em, tripA, tripDAO);
             }
         }else
@@ -227,12 +227,8 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void editTrip(EntityManager em, Trip tripA, TripDAO tripDAO, TripService tripService, AddressService addressService) {
+    private static void editTrip(Trip tripA, TripService tripService, AddressService addressService) {
         boolean getBack;
-        String cityName, stateName = "";
-        City cityA = new City();
-        City cityDB;
-        OsrmClient osrmClient = new OsrmClient();
         Scanner sc = new Scanner(System.in);
         System.out.print("""
             Do you want to alter an info from a trip?
