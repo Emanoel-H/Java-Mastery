@@ -144,21 +144,8 @@ public class BusCompanyMainScreen {
                     busCompanyService.updateLegalName(busCompanyDB, legalName);
                     break;
                 case 2:
-                    String tradingName;
-                    do {
-                        System.out.print("Type in your Trading Name: ");
-                        tradingName = sc.nextLine().trim();
-
-                        if (tradingName.isEmpty()) {
-                            System.out.println("Trading name cannot be empty. Please try again.");
-                        }
-                    } while (tradingName.isEmpty());
-
-                    busCompanyDB.setTradingName(tradingName);
-
-                    em.getTransaction().begin();
-                    busCompanyDAO.updateCompany(busCompanyDB);
-                    em.getTransaction().commit();
+                    String tradingName = collectTradingName(sc);
+                    busCompanyService.updateTradingName(busCompanyDB, tradingName);
                     break;
                 case 3:
                     String newPassword;
