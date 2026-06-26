@@ -1,7 +1,5 @@
 package br.com.javamastery.bytebank;
 
-import br.com.javamastery.client.OsrmClient;
-import br.com.javamastery.dao.*;
 import br.com.javamastery.exception.InvalidCredentialsException;
 import br.com.javamastery.exception.InvalidPriceException;
 import br.com.javamastery.exception.TripNotFoundException;
@@ -17,7 +15,6 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class BusCompanyMainScreen {
@@ -25,7 +22,6 @@ public class BusCompanyMainScreen {
         Scanner sc = new Scanner(System.in);
         JPAUtils jpaUtils = new JPAUtils();
         EntityManager em = jpaUtils.getEntityManager();
-        BusCompanyDAO busCompanyDAO = new BusCompanyDAO(em);
         boolean exitSystem = false;
         boolean accessGranted = false;
         String emailAddress, password;
