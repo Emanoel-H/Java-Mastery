@@ -187,13 +187,13 @@ public class BusCompanyMainScreen {
 
             if (!allTrips.isEmpty()) {
                 editTrip(tripA, tripService, addressService);
-                deleteTrip(em, tripA, tripDAO);
+                deleteTrip(em, tripA, tripDAO, tripService);
             }
         }else
             System.out.println("There is no trips in the database yet!");
     }
 
-    private static void deleteTrip(EntityManager em, Trip tripA, TripDAO tripDAO) {
+    private static void deleteTrip(EntityManager em, Trip tripA, TripDAO tripDAO, TripService tripService) {
         Scanner sc = new Scanner(System.in);
         System.out.println("""
                 Do you wish to delete a trip?
