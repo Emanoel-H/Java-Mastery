@@ -61,4 +61,19 @@ public class TripService {
     public Trip searchSingleTrip(Trip trip) {
         return tripDAO.searchSingleTrip(trip);
     }
+
+    public void updateOriginCity(Trip trip, City origin) {
+        trip.setOriginCity(origin);
+
+        trip.setPrice(BigDecimal.valueOf(suggestPrice(trip.getOriginCity(), trip.getDestinationCity())));
+
+        try{
+            this.em.getTransaction().begin();
+            this.tripDAO.updateTrip(trip);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
