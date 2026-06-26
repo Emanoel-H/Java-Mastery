@@ -148,21 +148,8 @@ public class BusCompanyMainScreen {
                     busCompanyService.updateTradingName(busCompanyDB, tradingName);
                     break;
                 case 3:
-                    String newPassword;
-                    do {
-                        System.out.print("Type in your new Password: ");
-                        newPassword = sc.nextLine().trim();
-
-                        if (newPassword.isEmpty()) {
-                            System.out.println("A password cannot be empty. Please try again.");
-                        }
-                    } while (newPassword.isEmpty());
-
-                    busCompanyDB.getEmail().setPassword(newPassword);
-
-                    em.getTransaction().begin();
-                    busCompanyDAO.updateCompany(busCompanyDB);
-                    em.getTransaction().commit();
+                    String newPassword = collectPassword(sc);
+                    busCompanyService.updatePassword(busCompanyDB, newPassword);
                     break;
                 case 4:
                     String newCNPJ;
