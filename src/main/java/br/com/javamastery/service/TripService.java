@@ -91,4 +91,17 @@ public class TripService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateDepartureTime(Trip trip, LocalTime departureTime) {
+        trip.setDepartureTime(departureTime);
+
+        try{
+            this.em.getTransaction().begin();
+            this.tripDAO.updateTrip(trip);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
