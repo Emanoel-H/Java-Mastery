@@ -278,23 +278,8 @@ public class BusCompanyMainScreen {
                         tripService.updateDestinationCity(tripDB, destination);
                         break;
                     case 3:
-                        boolean getBackTime = false;
-                        while (!getBackTime) {
-                            System.out.println("When will be the departure time? (Use 24-hour format, example: 14:30)");
-                            String departureTimeString = sc.nextLine();
-
-                            try {
-                                LocalTime departureTime = LocalTime.parse(departureTimeString);
-                                tripDB.setDepartureTime(departureTime);
-
-                                em.getTransaction().begin();
-                                tripDAO.updateTrip(tripDB);
-                                em.getTransaction().commit();
-                                getBackTime = true;
-                            } catch (DateTimeParseException e) {
-                                System.out.println("Invalid format! Please enter the time precisely as HH:mm.");
-                            }
-                        }
+                        LocalTime departureTime = askDepartureTime(sc);
+                        tripService.updateDepartureTime(tripDB, departureTime);
                         break;
                     case 4:
                         boolean getBackPrice = false;
