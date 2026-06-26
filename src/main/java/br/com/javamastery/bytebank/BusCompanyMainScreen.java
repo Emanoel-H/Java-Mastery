@@ -140,21 +140,8 @@ public class BusCompanyMainScreen {
             sc.nextLine();
             switch (choice) {
                 case 1:
-                    String legalName;
-                    do {
-                        System.out.print("Type in your Legal Name: ");
-                        legalName = sc.nextLine().trim();
-
-                        if (legalName.isEmpty()) {
-                            System.out.println("Legal name cannot be empty. Please try again.");
-                        }
-                    } while (legalName.isEmpty());
-
-                    busCompanyDB.setLegalName(legalName);
-
-                    em.getTransaction().begin();
-                    busCompanyDAO.updateCompany(busCompanyDB);
-                    em.getTransaction().commit();
+                    String legalName = collectLegalName(sc);
+                    busCompanyService.updateLegalName(busCompanyDB, legalName);
                     break;
                 case 2:
                     String tradingName;
