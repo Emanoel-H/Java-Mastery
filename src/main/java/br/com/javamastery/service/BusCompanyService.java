@@ -39,4 +39,17 @@ public class BusCompanyService {
     public BusCompany searchCompany(BusCompany busCompany){
         return busCompanyDAO.searchCompany(busCompany);
     }
+
+    public void updateLegalName(BusCompany busCompany, String legalName){
+        busCompany.setLegalName(Objects.requireNonNull(legalName, "Cannot be empty"));
+
+        try{
+            this.em.getTransaction().begin();
+            this.busCompanyDAO.updateCompany(busCompany);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
