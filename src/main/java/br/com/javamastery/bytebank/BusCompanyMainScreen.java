@@ -270,33 +270,8 @@ public class BusCompanyMainScreen {
                 sc.nextLine();
                 switch (choice) {
                     case 1:
-                        cityName = "";
-                        while (cityName.isEmpty()) {
-                            System.out.println("Type in the name of the origin city: \nIf you wish to view the cities before type 1");
-                            cityName = sc.nextLine();
-
-                            if (cityName.trim().charAt(0) == '1')
-                                tripDB.setOriginCity(viewCities(stateName,sc, cityName, addressService));
-                            else {
-                                cityA.setCity(cityName.toLowerCase());
-                                cityDB = addressService.searchCity(cityA);
-
-                                if (cityDB != null)
-                                    tripDB.setOriginCity(cityDB);
-                                else {
-                                    cityName = "";
-                                    System.out.println("Type in a valid value!");
-                                }
-                            }
-                        }
-
-                        tripDB.setPrice(BigDecimal.valueOf(tripService.suggestPrice(tripDB.getOriginCity(), tripDB.getDestinationCity())));
-
-                        if (tripDB.getOriginCity() != null) {
-                            em.getTransaction().begin();
-                            tripDAO.updateTrip(tripDB);
-                            em.getTransaction().commit();
-                        }
+                        City origin = collectOriginCity(sc, addressService);
+                        tripService.updateOriginCity(tripDB, origin);
                         break;
                     case 2:
                         cityName = "";
