@@ -282,22 +282,9 @@ public class BusCompanyMainScreen {
                         tripService.updateDepartureTime(tripDB, departureTime);
                         break;
                     case 4:
-                        boolean getBackPrice = false;
-                        while (!getBackPrice) {
-                            System.out.println("Type in the price of the trip: ");
-                            BigDecimal tripPrice = sc.nextBigDecimal();
-
-                            if (tripPrice.intValue() <= 0 || tripPrice.equals(BigDecimal.ZERO))
-                                throw new InvalidPriceException(tripPrice);
-                            else {
-                                tripDB.setPrice(tripPrice);
-
-                                em.getTransaction().begin();
-                                tripDAO.updateTrip(tripDB);
-                                em.getTransaction().commit();
-                                getBackPrice = true;
-                            }
-                        }
+                        double suggested = tripService.suggestPrice(tripDB.getOriginCity(), tripDB.getDestinationCity());
+                        BigDecimal price = askPriceOrAcceptSuggestion(sc, suggested);
+                        tripService.updateTripPrice(tripDB, price);
                         break;
                     case 5:
                         System.out.println("Exiting...");
