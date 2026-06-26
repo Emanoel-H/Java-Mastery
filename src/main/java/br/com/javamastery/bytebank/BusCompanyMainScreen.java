@@ -248,7 +248,7 @@ public class BusCompanyMainScreen {
                 System.out.println("Type in the code of the trip you want to alter: ");
                 String tripCode = sc.nextLine();
                 tripA.setCode(tripCode);
-                tripDB = tripDAO.searchSingleTrip(tripA);
+                tripDB = tripService.searchSingleTrip(tripA);
 
                 if (tripDB == null)
                     throw new IllegalArgumentException("Type in a valid code!");
