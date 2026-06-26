@@ -78,7 +78,7 @@ public class TripService {
     }
 
     public void updateDestinationCity(Trip trip, City destination) {
-        trip.setOriginCity(destination);
+        trip.setDestinationCity(destination);
 
         trip.setPrice(BigDecimal.valueOf(suggestPrice(trip.getOriginCity(), trip.getDestinationCity())));
 
