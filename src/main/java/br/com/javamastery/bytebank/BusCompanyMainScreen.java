@@ -152,21 +152,8 @@ public class BusCompanyMainScreen {
                     busCompanyService.updatePassword(busCompanyDB, newPassword);
                     break;
                 case 4:
-                    String newCNPJ;
-                    do {
-                        System.out.print("Type in your new CNPJ: ");
-                        newCNPJ = sc.nextLine().trim();
-
-                        if (newCNPJ.isEmpty()) {
-                            System.out.println("CNPJ cannot be empty. Please try again.");
-                        }
-                    } while (newCNPJ.isEmpty());
-
-                    busCompanyDB.setCnpj(newCNPJ);
-
-                    em.getTransaction().begin();
-                    busCompanyDAO.updateCompany(busCompanyDB);
-                    em.getTransaction().commit();
+                    String newCNPJ = collectCnpj(sc);
+                    busCompanyService.updateCnpj(busCompanyDB, newCNPJ);
                     break;
                 case 5:
                     String newTelephone;
