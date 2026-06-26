@@ -156,21 +156,8 @@ public class BusCompanyMainScreen {
                     busCompanyService.updateCnpj(busCompanyDB, newCNPJ);
                     break;
                 case 5:
-                    String newTelephone;
-                    do {
-                        System.out.print("Type in your new Telephone: ");
-                        newTelephone = sc.nextLine().trim();
-
-                        if (newTelephone.isEmpty()) {
-                            System.out.println("Telephone cannot be empty. Please try again.");
-                        }
-                    } while (newTelephone.isEmpty());
-
-                    busCompanyDB.setTelephone(newTelephone);
-
-                    em.getTransaction().begin();
-                    busCompanyDAO.updateCompany(busCompanyDB);
-                    em.getTransaction().commit();
+                    String newTelephone = collectTelephone(sc);
+                    busCompanyService.updateTelephone(busCompanyDB, newTelephone);
                     break;
                 case 6:
                     System.out.println("Exiting...");
