@@ -210,14 +210,12 @@ public class BusCompanyMainScreen {
                 String tripCode = sc.nextLine();
                 if (!tripCode.equalsIgnoreCase("C")) {
                     tripA.setCode(tripCode);
-                    Trip tripDB = tripDAO.searchSingleTrip(tripA);
+                    Trip tripDB = tripService.searchSingleTrip(tripA);
 
                     if (tripDB == null)
                         throw new TripNotFoundException(tripCode);
                     else {
-                        em.getTransaction().begin();
-                        tripDAO.delete(tripDB);
-                        em.getTransaction().commit();
+                        tripService.delete(tripDB);
                         getBack = false;
                     }
                 }else
