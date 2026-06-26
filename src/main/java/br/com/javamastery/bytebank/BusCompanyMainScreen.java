@@ -646,4 +646,18 @@ public class BusCompanyMainScreen {
 
         return newCNPJ;
     }
+
+    public static String collectTelephone(Scanner sc){
+        String newTelephone;
+        do {
+            System.out.print("Type in your new Telephone: ");
+            newTelephone = sc.nextLine().trim();
+
+            if (newTelephone.isEmpty()) {
+                System.out.println("Telephone cannot be empty. Please try again.");
+            }
+        } while (newTelephone.isEmpty());
+
+        return newTelephone;
+    }
 }
