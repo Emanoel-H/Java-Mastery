@@ -101,7 +101,7 @@ public class BusCompanyMainScreen {
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyService.searchCompany(busCompanyA);
-                            viewTrips(em, busCompanyDB, tripService, addressService);
+                            viewTrips(busCompanyDB, tripService, addressService);
                             break;
                         case 3:
                             busCompanyA = new BusCompany();
@@ -169,12 +169,11 @@ public class BusCompanyMainScreen {
         }
     }
 
-    private static void viewTrips(EntityManager em, BusCompany busCompanyDB, TripService tripService, AddressService addressService) {
-        TripDAO tripDAO = new TripDAO(em);
+    private static void viewTrips(BusCompany busCompanyDB, TripService tripService, AddressService addressService) {
         Trip tripA = new Trip();
         tripA.setBusCompany(busCompanyDB);
 
-        List<Trip> allTrips = tripDAO.searchTrips(tripA);
+        List<Trip> allTrips = tripService.searchTrips(tripA);
 
         if (!allTrips.isEmpty()) {
             String messageToDisplay = "Here is your trip: ";
