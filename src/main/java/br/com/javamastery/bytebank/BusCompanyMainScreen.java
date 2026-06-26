@@ -107,7 +107,7 @@ public class BusCompanyMainScreen {
                             busCompanyA = new BusCompany();
                             busCompanyA.setEmail(emailA);
                             busCompanyDB = busCompanyService.searchCompany(busCompanyA);
-                            updateProfile(sc, busCompanyDB, busCompanyDAO, em, busCompanyService);
+                            updateProfile(sc, busCompanyDB, busCompanyService);
                             break;
                         case 4:
                             exitSystem = true;
@@ -123,7 +123,7 @@ public class BusCompanyMainScreen {
         em.close();
     }
 
-    private static void updateProfile(Scanner sc, BusCompany busCompanyDB, BusCompanyDAO busCompanyDAO, EntityManager em, BusCompanyService busCompanyService) {
+    private static void updateProfile(Scanner sc, BusCompany busCompanyDB, BusCompanyService busCompanyService) {
         boolean exitWhile = false;
         while (!exitWhile){
             System.out.println(busCompanyDB);
