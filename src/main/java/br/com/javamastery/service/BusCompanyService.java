@@ -78,4 +78,17 @@ public class BusCompanyService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updatePassword(BusCompany busCompany, String password){
+        busCompany.getEmail().setPassword(Objects.requireNonNull(password, "Cannot be empty"));
+
+        try{
+            this.em.getTransaction().begin();
+            this.busCompanyDAO.updateCompany(busCompany);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
