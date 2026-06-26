@@ -643,4 +643,18 @@ public class BusCompanyMainScreen {
 
         return legalName;
     }
+
+    public static String collectTradingName(Scanner sc){
+        String tradingName;
+        do {
+            System.out.print("Type in your Trading Name: ");
+            tradingName = sc.nextLine().trim();
+
+            if (tradingName.isEmpty()) {
+                System.out.println("Trading name cannot be empty. Please try again.");
+            }
+        } while (tradingName.isEmpty());
+
+        return tradingName;
+    }
 }
