@@ -642,4 +642,18 @@ public class BusCompanyMainScreen {
         return departureTime;
 
     }
+
+    public static String collectLegalName(Scanner sc){
+        String legalName;
+        do {
+            System.out.print("Type in your Legal Name: ");
+            legalName = sc.nextLine().trim();
+
+            if (legalName.isEmpty()) {
+                System.out.println("Legal name cannot be empty. Please try again.");
+            }
+        } while (legalName.isEmpty());
+
+        return legalName;
+    }
 }
