@@ -91,4 +91,17 @@ public class BusCompanyService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateTelephone(BusCompany busCompany, String telephone){
+        busCompany.setTelephone(telephone);
+
+        try{
+            this.em.getTransaction().begin();
+            this.busCompanyDAO.updateCompany(busCompany);
+            this.em.getTransaction().commit();
+        }catch(Exception e){
+            this.em.getTransaction().rollback();
+            throw new RuntimeException(e);
+        }
+    }
 }
