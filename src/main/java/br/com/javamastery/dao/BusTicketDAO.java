@@ -65,7 +65,7 @@ public class BusTicketDAO {
         Map<String, Object> params = new HashMap<>();
 
         if (busTicketA.getTraveler().getId() != null){
-            jpql.append("AND bt.buyerid LIKE :buyerId ");
+            jpql.append("AND bt.buyerid = :buyerId ");
             params.put("buyerId", busTicketA.getTraveler().getId());
         }
 
