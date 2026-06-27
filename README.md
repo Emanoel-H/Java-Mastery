@@ -13,7 +13,7 @@ A console-based Java application for managing bus trips and tickets, featuring a
 - [Database Schema](#database-schema)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
-- [Known Issues & Roadmap](#known-issues--roadmap)
+- [Roadmap](#roadmap)
 
 ---
 
@@ -50,6 +50,7 @@ BusApp is a backend-focused Java project built to practice JPA/Hibernate, the DA
 - Automatic code generation for trips and tickets
 - Per-operation transaction handling with rollback on failure
 - Custom domain exceptions for all business rule violations
+- No DAO access in the UI layer — all interactions go through Services
 - Credentials loaded from **environment variables** (no hardcoded secrets)
 
 ---
@@ -65,7 +66,7 @@ BusApp is a backend-focused Java project built to practice JPA/Hibernate, the DA
 | JSON Mapping | Jackson (`jackson-databind` 2.18.3) |
 | External API | OSRM (routing/distance) |
 | Build | Maven |
-| Utilities | Lombok, FlatLaf (Swing UI prototype) |
+| Utilities | Lombok |
 
 ---
 
@@ -74,17 +75,17 @@ BusApp is a backend-focused Java project built to practice JPA/Hibernate, the DA
 ```
 src/main/java/br/com/javamastery/
 │
-├── bytebank/                # UI layer — input/output only, no business logic
-│   ├── MainScreen.java          # Traveler flow
-│   ├── BusCompanyMainScreen.java   # Bus company flow
-│   └── AddressMainScreen.java   # Address/city search
+├── bytebank/                      # UI layer — input/output only, no business logic
+│   ├── MainScreen.java                # Traveler flow
+│   ├── BusCompanyMainScreen.java      # Bus company flow
+│   └── AddressMainScreen.java         # Address/city search
 │
-├── client/                  # External API integration
-│   ├── OsrmClient.java          # OSRM HTTP client
+├── client/                        # External API integration
+│   ├── OsrmClient.java                # OSRM HTTP client with Haversine fallback
 │   └── dto/
-│       └── OsrmResponse.java    # OSRM JSON response mapping
+│       └── OsrmResponse.java          # OSRM JSON response mapping
 │
-├── dao/                     # Data Access Layer — queries only
+├── dao/                           # Data Access Layer — queries only
 │   ├── AddressDAO.java
 │   ├── BusCompanyDAO.java
 │   ├── BusTicketDAO.java
@@ -92,7 +93,7 @@ src/main/java/br/com/javamastery/
 │   ├── TravelerDAO.java
 │   └── TripDAO.java
 │
-├── exception/               # Custom domain exceptions
+├── exception/                     # Custom domain exceptions
 │   ├── CancellationDeadlineExceededException.java
 │   ├── CityNotFoundException.java
 │   ├── EmailAlreadyExistsException.java
@@ -102,7 +103,7 @@ src/main/java/br/com/javamastery/
 │   ├── TripAlreadySoldException.java
 │   └── TripNotFoundException.java
 │
-├── models/                  # JPA Entities
+├── models/                        # JPA Entities
 │   ├── BusCompany.java
 │   ├── BusTicket.java
 │   ├── Category.java (enum)
@@ -113,14 +114,17 @@ src/main/java/br/com/javamastery/
 │   ├── Traveler.java
 │   └── Trip.java
 │
-├── service/                 # Business logic layer
-│   ├── AuthService.java         # login(), emailExists(), checkEmailAvailable()
-│   ├── TicketService.java       # buyTicket(), cancelTicket()
-│   └── TripService.java         # suggestPrice(), createTrip(), searchTrips(), searchSingleTrip()
+├── service/                       # Business logic layer
+│   ├── AddressService.java            # searchCity(), searchAllState(), searchCitiesByState()
+│   ├── AuthService.java               # login(), emailExists(), checkEmailAvailable()
+│   ├── BusCompanyService.java         # signUp(), searchCompany(), updateLegalName/TradingName/Cnpj/Password/Telephone()
+│   ├── TicketService.java             # buyTicket(), cancelTicket(), updateTravelerName/CPF/BirthDate(), searchSingleTicket(), searchTickets()
+│   ├── TravelerService.java           # signUp(), updateName/CPF/Telephone/BirthDate/Password(), deleteProfile(), searchPerson()
+│   └── TripService.java               # suggestPrice(), createTrip(), searchTrips(), searchSingleTrip(), updateOriginCity/DestinationCity/DepartureTime/TripPrice(), delete()
 │
-└── util/                    # Utilities
-    ├── JPAUtils.java            # EntityManagerFactory singleton
-    └── ValidationUtils.java     # Random code generation
+└── util/                          # Utilities
+    ├── JPAUtils.java                  # EntityManagerFactory singleton with env-var config
+    └── ValidationUtils.java           # Random code generation
 ```
 
 ---
@@ -217,29 +221,6 @@ export DB_USER="root"
 export DB_PASS="yourpassword"
 ```
 
----
-
-## Known Issues & Roadmap
-
-### Recently Completed
-- ✅ Migrated from `javax.persistence` to `jakarta.persistence`
-- ✅ Fixed transaction scope — each write operation owns its own transaction with rollback on failure
-- ✅ Added missing JPA mappings (`@ManyToOne`, `@OneToOne`)
-- ✅ Real route distance via OSRM with Haversine fallback
-- ✅ `isTripActive()` guard prevents deleting trips with ticket sales
-- ✅ Fixed `BigDecimal` comparison (`compareTo` instead of `intValue`)
-- ✅ Fixed cancel/exit detection (`equalsIgnoreCase("C")`)
-- ✅ 8 typed domain exceptions in `exception/`
-- ✅ `AuthService` — login, emailExists, checkEmailAvailable
-- ✅ `TripService` — suggestPrice, createTrip, searchTrips, searchSingleTrip
-- ✅ `TicketService` — buyTicket, cancelTicket (single DAO query on cancel)
-- ✅ `MainScreen.buyBusTickets()` decomposed into: `collectOriginCity`, `collectDestinationCity`, `collectTrip`, `collectDepartureDate`, `collectTraveler`
-- ✅ `BusCompanyMainScreen.createTrip()` decomposed into: `collectOriginCity`, `collectDestinationCity`, `askPriceOrAcceptSuggestion`, `askDepartureTime`
-
-### In Progress
-- [ ] `TravelerService` — signUp(), updateProfile(), deleteProfile()
-- [ ] `BusCompanyService` — signUp(), updateProfile()
-- [ ] Move remaining `em.getTransaction()` calls out of UI methods
 ---
 
 ## Author
