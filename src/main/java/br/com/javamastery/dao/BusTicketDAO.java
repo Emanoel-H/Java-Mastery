@@ -38,7 +38,7 @@ public class BusTicketDAO {
     }
 
     public BusTicket searchSingleTicket(BusTicket busTicketA){
-        StringBuilder jpql = new StringBuilder("SELECT bt.id FROM BusTicket bt WHERE 1=1 ");
+        StringBuilder jpql = new StringBuilder("SELECT bt FROM BusTicket bt WHERE 1=1 ");
 
         Map<String, Object> params = new HashMap<>();
 
